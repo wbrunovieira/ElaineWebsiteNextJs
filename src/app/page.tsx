@@ -5,8 +5,7 @@ export default function Home() {
     <div className="bg-background">
       <HeroSection
         ctaLink="/signup"
-        imageSrc="/placeholder.svg?height=400&width=600"
-        imageAlt="Product showcase"
+        videoSrc="/kudalini_hero.mp4"
       />
     </div>
   );
