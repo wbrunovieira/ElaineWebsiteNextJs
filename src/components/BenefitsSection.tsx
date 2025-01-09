@@ -25,16 +25,17 @@ export default function BenefitsSection({
     () => {
       gsap.fromTo(
         '.benefit-card',
-        { opacity: 0, y: 50 },
+        { opacity: 0, x: -100 },
         {
           opacity: 1,
-          y: 0,
+          x: 0,
           duration: 0.8,
           stagger: 0.2,
+          delay: 0.3,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 60%', // Ajuste para atrasar mais
+            start: 'top 60%',
             toggleActions: 'play none none none',
           },
         }

@@ -1,4 +1,5 @@
 import BenefitsSection from '@/components/BenefitsSection';
+import FAQSection from '@/components/FAQSection';
 import HeroSection from '@/components/hero-section';
 import ProblemSolutionSection from '@/components/ProblemSolutionSection';
 import {
@@ -39,6 +40,7 @@ export default function Home() {
         solutionText="Through Kundalini Activation, we awaken the dormant energy within you, bringing balance, healing, and a deeper connection with yourself and the world around you."
       />
       <BenefitsSection benefits={benefits} />
+      <FAQSection />
     </div>
   );
 }
