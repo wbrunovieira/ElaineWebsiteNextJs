@@ -6,6 +6,10 @@ import gsap from 'gsap';
 import { FaSeedling } from 'react-icons/fa';
 import { FiTarget } from 'react-icons/fi';
 
+import ScrollTrigger from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
 interface ProblemSolutionProps {
   problemText: string;
   solutionText: string;
