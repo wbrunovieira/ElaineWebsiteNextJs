@@ -1,6 +1,7 @@
 import BenefitsSection from '@/components/BenefitsSection';
 import FAQSection from '@/components/FAQSection';
 import HeroSection from '@/components/hero-section';
+import LocationSection from '@/components/LocationSection';
 import ProblemSolutionSection from '@/components/ProblemSolutionSection';
 import {
   FaLightbulb,
@@ -41,6 +42,7 @@ export default function Home() {
       />
       <BenefitsSection benefits={benefits} />
       <FAQSection />
+      <LocationSection />
     </div>
   );
 }

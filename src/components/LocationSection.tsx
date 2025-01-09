@@ -1,0 +1,144 @@
+'use client';
+
+import { useRef } from 'react';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+import {
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaClock,
+  FaGoogle,
+  FaWaze,
+} from 'react-icons/fa';
+
+gsap.registerPlugin(ScrollTrigger);
+
+export default function LocationSection() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    gsap.fromTo(
+      '.location-item',
+      { opacity: 0, x: -30 },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+  });
+
+  return (
+    <section
+      ref={sectionRef}
+      className="container mx-auto px-6 py-16 md:py-24 lg:py-32 bg-background relative"
+    >
+      <div className="text-center max-w-2xl mx-auto mb-12">
+        <h2 className="text-2xl md:text-4xl font-playfair font-bold text-primary mb-4">
+          Event Location
+        </h2>
+        <hr className="border-t border-muted w-full md:w-3/4 my-4 mx-auto fade-in" />
+        <p className="text-lg md:text-xl font-lato text-muted-foreground leading-relaxed">
+          Join us at a serene and welcoming venue for this
+          transformative experience.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        {/* Map Section */}
+        <div className="w-full rounded-lg overflow-hidden shadow-lg location-item">
+          {/* Icons above the map */}
+          <div className="flex justify-center space-x-6 mb-4">
+            <a
+              href="https://www.google.com/maps/place/Fun%26Flow/@26.1504671,-80.1340523,17z/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#4285F4] text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform"
+              title="Open in Google Maps"
+            >
+              <FaGoogle className="h-6 w-6" />
+            </a>
+            <a
+              href="https://ul.waze.com/ul?ll=26.150467,-80.134052&navigate=yes"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#2C94F4] text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform"
+              title="Open in Waze"
+            >
+              <FaWaze className="h-6 w-6" />
+            </a>
+          </div>
+
+          {/* Map */}
+          <div className="aspect-w-16 aspect-h-9">
+            <iframe
+              title="Location Map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3851.7962910119254!2d-80.1340522720193!3d26.15046716770682!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d901bd541b449d%3A0xec3f2a005e9a564b!2sFunk%26Flow!5e0!3m2!1sen!2sbr!4v1736451372227!5m2!1sen!2sbr"
+              className="w-full h-full"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
+        </div>
+
+        {/* Details */}
+        <div className="space-y-6 location-item">
+          <div className="flex items-center space-x-4">
+            <FaMapMarkerAlt className="text-primary h-8 w-8" />
+            <div>
+              <h3 className="text-xl font-playfair font-bold text-primary">
+                Location
+              </h3>
+              <p className="text-muted-foreground font-lato">
+                Fun&Flow - Fort Lauderdale, FL
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <FaCalendarAlt className="text-primary h-8 w-8" />
+            <div>
+              <h3 className="text-xl font-playfair font-bold text-primary">
+                Date
+              </h3>
+              <p className="text-muted-foreground font-lato">
+                January 18th, 2025
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <FaClock className="text-primary h-8 w-8" />
+            <div>
+              <h3 className="text-xl font-playfair font-bold text-primary">
+                Time
+              </h3>
+              <p className="text-muted-foreground font-lato">
+                12:00 PM - 2:00 PM
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <a
+              href="https://www.eventbrite.com/e/1135200829239?aff=oddtdtcreator"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-6 py-3 bg-primary text-white font-bold text-lg rounded shadow-lg transition-transform transform hover:scale-105"
+            >
+              Reserve Your Spot
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
