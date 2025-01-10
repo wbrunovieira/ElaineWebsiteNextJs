@@ -1,4 +1,7 @@
 import BenefitsSection from '@/components/BenefitsSection';
+import CTASection, {
+  options,
+} from '@/components/CTASection';
 import FAQSection from '@/components/FAQSection';
 import HeroSection from '@/components/hero-section';
 import LocationSection from '@/components/LocationSection';
@@ -31,6 +34,7 @@ export default function Home() {
         'Awaken your creative energy and unlock your natural magnetism.',
     },
   ];
+
   return (
     <div className="bg-background">
       <HeroSection
@@ -45,6 +49,11 @@ export default function Home() {
       <BenefitsSection benefits={benefits} />
       <FAQSection />
       <LocationSection />
+      <CTASection
+        ctaText="Choose Your Kundalini Activation Experience"
+        description="Whether in-person or online, awaken your inner power with our Kundalini Activation sessions."
+        options={options}
+      />
     </div>
   );
 }
