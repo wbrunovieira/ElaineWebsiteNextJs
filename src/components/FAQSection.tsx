@@ -5,7 +5,6 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import {
-  FiHelpCircle,
   FiTarget,
   FiActivity,
   FiUsers,
@@ -14,7 +13,7 @@ import {
   FiSmile,
   FiPackage,
   FiBox,
-} from 'react-icons/fi'; // Importando ícones
+} from 'react-icons/fi';
 import {
   Accordion,
   AccordionItem,

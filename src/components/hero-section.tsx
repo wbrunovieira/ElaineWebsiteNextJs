@@ -44,14 +44,14 @@ export default function HeroSection({
         <div className="flex flex-col items-center md:items-start text-center md:text-left bg-background p-4 rounded-lg shadow-md">
           <div className="flex justify-center md:justify-start items-center mb-4 fade-in">
             <GiMeditation className="text-primary h-10 w-10 mr-4" />
-            <h1 className="text-sm text-primary font-lato tracking-tight fade-in -mb-1">
+            <p className="text-sm text-primary font-lato tracking-tight fade-in -mb-1">
               Awaken the Power Within –
-            </h1>
+            </p>
           </div>
 
-          <p className="font-playfair uppercase font-bold tracking-wider text-3xl md:text-5xl whitespace-pre-wrap leading-tight fade-in">
+          <h1 className="font-playfair uppercase font-bold tracking-wider text-3xl md:text-5xl whitespace-pre-wrap leading-tight fade-in">
             Kundalini Activation
-          </p>
+          </h1>
           <p className="font-playfair text-primary italic font-thin mt-1 fade-in">
             by Elaine Vieira
           </p>
