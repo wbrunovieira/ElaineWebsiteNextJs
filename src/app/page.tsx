@@ -3,6 +3,7 @@ import CTASection, {
   options,
 } from '@/components/CTASection';
 import FAQSection from '@/components/FAQSection';
+import { Footer } from '@/components/Footer';
 import HeroSection from '@/components/hero-section';
 import LocationSection from '@/components/LocationSection';
 import PhotoGallery from '@/components/PhotoGallery';
@@ -54,6 +55,7 @@ export default function Home() {
         description="Whether in-person or online, awaken your inner power with our Kundalini Activation sessions."
         options={options}
       />
+      <Footer />
     </div>
   );
 }
