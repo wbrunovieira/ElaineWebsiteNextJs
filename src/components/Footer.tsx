@@ -105,7 +105,7 @@ export const Footer = () => {
               Contact
             </h3>
 
-            <div className="flex flex-col items-left gap-2">
+            <div className="flex flex-col items-center md:items-start gap-2">
               <div>Elaine Vieira</div>
               <div className="flex items-center gap-2">
                 <FaMapMarkerAlt className="text-lg" />
