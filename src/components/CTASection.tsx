@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { forwardRef, useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
@@ -42,11 +42,10 @@ export const options = [
   },
 ];
 
-export default function CTASection({
-  ctaText,
-  description,
-  options,
-}: CTASectionProps) {
+const CTASection = forwardRef<
+  HTMLDivElement,
+  CTASectionProps
+>(({ ctaText, description, options }, ref) => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
@@ -77,9 +76,9 @@ export default function CTASection({
 
   return (
     <section
-      ref={sectionRef}
+      ref={ref || sectionRef}
       className={cn(
-        'container mx-auto px-6 py-4 rounded md:py-4 bg-gradient-to-r from-primary/80 via-primary to-destructive  text-card text-center shadow-xl relative'
+        'container mx-auto px-6 py-4 rounded md:py-4 bg-gradient-to-r from-primary/80 via-primary to-destructive text-card text-center shadow-xl relative'
       )}
     >
       <div className="max-w-4xl mx-auto">
@@ -97,4 +96,8 @@ export default function CTASection({
       </div>
     </section>
   );
-}
+});
+
+CTASection.displayName = 'CTASection';
+
+export default CTASection;

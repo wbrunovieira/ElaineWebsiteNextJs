@@ -10,7 +10,13 @@ interface Testimonial {
   content: string;
 }
 
-export default function TestimonialsSection() {
+interface TestimonialsSectionProps {
+  onActionClick: () => void;
+}
+
+export default function TestimonialsSection({
+  onActionClick,
+}: TestimonialsSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [modalVideoSrc, setModalVideoSrc] = useState<
     string | null
@@ -97,7 +103,7 @@ export default function TestimonialsSection() {
           return (
             <div
               key={index}
-              className="testimonial-card bg-card shadow-md rounded-lg p-6"
+              className="testimonial-card bg-card shadow-md rounded p-6"
             >
               <p className="text-lg italic text-muted-foreground mb-4">
                 &quot;{contentToShow}&quot;
@@ -141,7 +147,7 @@ export default function TestimonialsSection() {
         {videoSources.map((videoSrc, index) => (
           <div
             key={index}
-            className="relative aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg cursor-pointer"
+            className="relative aspect-w-16 aspect-h-9 rounded overflow-hidden shadow-lg cursor-pointer"
             onClick={() => setModalVideoSrc(videoSrc)}
           >
             <video
@@ -158,8 +164,8 @@ export default function TestimonialsSection() {
 
       <div className="text-center mt-16">
         <button
-          onClick={() => alert('Action button clicked!')}
-          className="bg-primary text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-primary-dark transition duration-300"
+          onClick={onActionClick}
+          className="bg-primary  shadow hover:bg-primary/90  transform transition-transform duration-300 hover:scale-105 h-10 rounded px-8 text-background font-lato"
         >
           I want this too
         </button>
@@ -169,7 +175,7 @@ export default function TestimonialsSection() {
         <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
           <div className="relative w-full max-w-md mx-auto p-4">
             <div
-              className="relative w-full rounded-lg overflow-hidden"
+              className="relative w-full rounded overflow-hidden"
               style={{ aspectRatio: '16 / 9' }}
             >
               <video
