@@ -72,22 +72,12 @@ export default function HeroSection({
             </span>
             .
           </p>
+          <hr className="border-t border-muted w-1/2 md:w-1/3 my-4 fade-in" />
           <p className="text-base font-lato font-extralight mt-2 fade-in">
             | Group Session |
           </p>
 
-          <hr className="border-t border-muted w-1/2 md:w-1/3 my-4 fade-in" />
-          <div className="mt-2 fade-in">
-            <Button asChild variant="default" size="lg">
-              <a
-                href={ctaLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Get Started
-              </a>
-            </Button>
-          </div>
+          <div className="mt-2 fade-in"></div>
         </div>
 
         <div className="w-full max-w-lg mx-auto md:mx-0">

@@ -87,10 +87,13 @@ const CTASection = forwardRef<
             {ctaText}
           </h2>
           <hr className="border-t border-card w-1/2 mx-auto my-2" />
-          <p className="text-xl md:text-2xl font-lato leading-relaxed -mb-8 text-muted-foreground">
+          <p className="text-xl md:text-2xl font-lato leading-relaxed mb-2 text-muted-foreground">
             {description}
           </p>
         </div>
+        <h4 className="text-xl md:text-xl font-lato leading-relaxed text-muted-foreground mt-4">
+          Choose Below group online or in-person:
+        </h4>
 
         <HoverEffect items={hoverItems} />
       </div>

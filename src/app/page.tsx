@@ -18,6 +18,7 @@ import {
   FaPeace,
   FaStar,
 } from 'react-icons/fa';
+import CTAButton from '@/components/CTAButton';
 
 export default function Home() {
   const benefits = [
@@ -57,17 +58,41 @@ export default function Home() {
         ctaLink="https://www.eventbrite.com/e/1135200829239?aff=oddtdtcreator"
         videoSrc="/videos/kudalini_hero.mp4"
       />
+      <CTAButton
+        text="Book Your Session Now!"
+        ctaRef={ctaSectionRef}
+      />
 
       <ProblemSolutionSection
         problemText="Many people struggle with feelings of disconnection and emotional blocks, preventing them from experiencing true harmony and fulfillment."
         solutionText="Through Kundalini Activation, we awaken the dormant energy within you, bringing balance, healing, and a deeper connection with yourself and the world around you."
       />
+      <CTAButton
+        text="Start Your Transformation Now!"
+        ctaRef={ctaSectionRef}
+      />
       <PhotoGallery />
+      <CTAButton
+        text="Transform Your Life Now"
+        ctaRef={ctaSectionRef}
+      />
       <BenefitsSection benefits={benefits} />
+      <CTAButton
+        text="I’m Ready to Join"
+        ctaRef={ctaSectionRef}
+      />
       <TestimonialsSection
         onActionClick={scrollToCTASection}
       />
+      <CTAButton
+        text="I Want to Experience This Too!"
+        ctaRef={ctaSectionRef}
+      />
       <FAQSection />
+      <CTAButton
+        text="I Have All the Answers, Sign Me Up!"
+        ctaRef={ctaSectionRef}
+      />
       <LocationSection />
       <CTASection
         ref={ctaSectionRef}

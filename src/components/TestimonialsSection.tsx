@@ -14,9 +14,7 @@ interface TestimonialsSectionProps {
   onActionClick: () => void;
 }
 
-export default function TestimonialsSection({
-  onActionClick,
-}: TestimonialsSectionProps) {
+export default function TestimonialsSection({}: TestimonialsSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [modalVideoSrc, setModalVideoSrc] = useState<
     string | null
@@ -162,14 +160,7 @@ export default function TestimonialsSection({
         ))}
       </div>
 
-      <div className="text-center mt-16">
-        <button
-          onClick={onActionClick}
-          className="bg-primary  shadow hover:bg-primary/90  transform transition-transform duration-300 hover:scale-105 h-10 rounded px-8 text-background font-lato"
-        >
-          I want this too
-        </button>
-      </div>
+      <div className="text-center mt-16"></div>
 
       {modalVideoSrc && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
