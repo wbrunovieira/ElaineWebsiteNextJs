@@ -2,17 +2,14 @@
 import gsap from 'gsap';
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { Button } from '@/components/ui/button';
 
 import { GiMeditation } from 'react-icons/gi';
 
 interface HeroSectionProps {
-  ctaLink: string;
   videoSrc: string;
 }
 
 export default function HeroSection({
-  ctaLink,
   videoSrc,
 }: HeroSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);

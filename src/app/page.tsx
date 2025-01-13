@@ -54,10 +54,7 @@ export default function Home() {
 
   return (
     <div className="bg-background">
-      <HeroSection
-        ctaLink="https://www.eventbrite.com/e/1135200829239?aff=oddtdtcreator"
-        videoSrc="/videos/kudalini_hero.mp4"
-      />
+      <HeroSection videoSrc="/videos/kudalini_hero.mp4" />
       <CTAButton
         text="Book Your Session Now!"
         ctaRef={ctaSectionRef}
