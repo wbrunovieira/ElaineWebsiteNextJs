@@ -126,17 +126,6 @@ export default function LocationSection() {
               </p>
             </div>
           </div>
-
-          <div className="mt-6">
-            <a
-              href="https://www.eventbrite.com/e/1135200829239?aff=oddtdtcreator"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-6 py-3 bg-primary text-white font-bold text-lg rounded shadow-lg transition-transform transform hover:scale-105"
-            >
-              Reserve Your Spot
-            </a>
-          </div>
         </div>
       </div>
     </section>
