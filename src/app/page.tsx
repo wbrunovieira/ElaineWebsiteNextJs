@@ -55,10 +55,12 @@ export default function Home() {
   return (
     <div className="bg-background">
       <HeroSection videoSrc="/videos/kudalini_hero.mp4" />
-      <CTAButton
-        text="Book Your Session Now!"
-        ctaRef={ctaSectionRef}
-      />
+      <div className="w-full flex justify-center z-10">
+        <CTAButton
+          text="Book Your Session Now!"
+          ctaRef={ctaSectionRef}
+        />
+      </div>
 
       <ProblemSolutionSection
         problemText="Many people struggle with feelings of disconnection and emotional blocks, preventing them from experiencing true harmony and fulfillment."

@@ -37,6 +37,8 @@ export default function HeroSection({
       className="container mx-auto px-4 py-12 md:py-24 lg:py-16 xl:py-6 relative min-h-screen flex items-center"
     >
       <div className="absolute inset-0 bg-background z-0"></div>
+      <div className="absolute inset-0 bg-snake-watermark bg-cover bg-center opacity-50 scale-150 z-0"></div>
+
       <div className="relative grid grid-cols-1 md:grid-cols-2 items-center gap-8 md:gap-16 z-10">
         <div className="flex flex-col items-center md:items-start text-center md:text-left bg-background p-4 rounded-lg shadow-md">
           <div className="flex justify-center md:justify-start items-center mb-4 fade-in">
@@ -77,8 +79,8 @@ export default function HeroSection({
           <div className="mt-2 fade-in"></div>
         </div>
 
-        <div className="w-full max-w-lg mx-auto md:mx-0">
-          <div className="relative aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-xl">
+        <div className="w-full max-w-lg mx-auto md:mx-0 relative">
+          <div className="relative aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-xl z-10">
             <video
               src={videoSrc}
               className="object-cover w-full h-full rounded"

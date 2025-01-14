@@ -18,7 +18,7 @@ export default function CTAButton({
   };
 
   return (
-    <div className="container text-center px-4">
+    <div className="w-full flex justify-center items-center px-4 z-50">
       <button
         onClick={scrollToCTA}
         className="tracking-wider text-3xl  px-6 py-3  text-white font-bold rounded shadow-md transition duration-300 hover:opacity-90 hover:scale-105"
