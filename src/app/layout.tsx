@@ -82,11 +82,7 @@ export default function RootLayout({
           href="/kundalini-icon.ico"
           sizes="any"
         />
-        <link
-          rel="icon"
-          type="image/svg+xml"
-          href="/kundalini-icon.svg"
-        />
+
         <link
           rel="apple-touch-icon"
           href="/kundalini-icon.png"

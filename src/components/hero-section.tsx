@@ -1,8 +1,7 @@
 'use client';
 import gsap from 'gsap';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
-
 import { GiMeditation } from 'react-icons/gi';
 
 interface HeroSectionProps {
@@ -13,6 +12,7 @@ export default function HeroSection({
   videoSrc,
 }: HeroSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useGSAP(
     () => {
@@ -30,6 +30,11 @@ export default function HeroSection({
     },
     { scope: containerRef }
   );
+
+  const handleVideoLoaded = () => {
+    console.log('Video has loaded!');
+    setIsLoading(false);
+  };
 
   return (
     <section
@@ -75,12 +80,15 @@ export default function HeroSection({
           <p className="text-base font-lato font-extralight mt-2 fade-in">
             | Group Session |
           </p>
-
-          <div className="mt-2 fade-in"></div>
         </div>
 
         <div className="w-full max-w-lg mx-auto md:mx-0 relative">
-          <div className="relative aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-xl z-10">
+          <div className="relative aspect-w-16 aspect-h-9 rounded overflow-hidden shadow-xl z-10">
+            {isLoading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-20">
+                <div className="w-10 h-10 border-4 border-t-primary border-white rounded-full animate-spin"></div>
+              </div>
+            )}
             <video
               src={videoSrc}
               className="object-cover w-full h-full rounded"
@@ -88,6 +96,7 @@ export default function HeroSection({
               loop
               muted
               playsInline
+              onCanPlay={handleVideoLoaded}
             />
           </div>
         </div>
