@@ -56,7 +56,7 @@ export default function RootLayout({
         />
         <meta
           property="og:url"
-          content="https://www.yourwebsite.com/kundalini-activation-session"
+          content="https://www.elainevieira-us.com/kundalini-activation-session"
         />
         <meta property="og:type" content="event" />
         <meta property="og:locale" content="en_US" />
@@ -108,7 +108,7 @@ export default function RootLayout({
                 name: 'Fun&Flow',
                 address: {
                   '@type': 'PostalAddress',
-                  streetAddress: '123 Example Street',
+                  streetAddress: '',
                   addressLocality: 'Fort Lauderdale',
                   addressRegion: 'FL',
                   postalCode: '33301',
@@ -116,17 +116,17 @@ export default function RootLayout({
                 },
               },
               image: [
-                'https://www.yourwebsite.com/kundalini-icon.png',
+                'https://www.https://www.elainevieira-us.com/kundalini-icon.png',
               ],
               organizer: {
                 '@type': 'Organization',
                 name: 'Elaine Kundalini',
-                url: 'https://www.yourwebsite.com',
+                url: 'https:/www.elainevieira-us.com',
               },
               offers: {
                 '@type': 'Offer',
-                url: 'https://www.yourwebsite.com/kundalini-activation-session',
-                price: '100',
+                url: 'https://www.elainevieira-us.com/kundalini-activation-session',
+                price: '80',
                 priceCurrency: 'USD',
                 availability: 'https://schema.org/InStock',
                 validFrom: '2025-01-01T00:00:00-05:00',

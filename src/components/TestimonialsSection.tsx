@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
@@ -16,41 +16,44 @@ interface TestimonialsSectionProps {
 
 export default function TestimonialsSection({}: TestimonialsSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
+
   const [modalVideoSrc, setModalVideoSrc] = useState<
     string | null
   >(null);
   const [expandedIndex, setExpandedIndex] = useState<
     number | null
   >(null);
+  const [videoLoadingStates, setVideoLoadingStates] =
+    useState<boolean[]>(Array(6).fill(true));
 
   const testimonials: Testimonial[] = [
     {
       name: 'Enda',
       city: 'Dally Pembroke Pines - Fort Lauderdale - FL - USA',
       content:
-        'I have participated in Kundalini sessions twice, and both experiences were truly transformative. I have been working with Elaine for over a year, during which she has provided me with a variety of treatments and therapies. However, I must say that the Kundalini sessions have been the most impactful for me. Having faced significant trauma a year and a half ago, Elaine has been instrumental in supporting my healing journey. Despite only having two Kundalini sessions, the experience has been life-changing. Each session brought about a profound sense of release, as though a heavy burden I&apos;ve been carrying was lifted. While I acknowledge that my healing process is ongoing, I wholeheartedly recommend a Kundalini session with Elaine. Her expertise and care make it an experience you won&apos;t regret.',
+        'I have participated in Kundalini sessions twice, and both experiences were truly transformative...',
     },
     {
       name: 'Maicy',
       city: 'Belo Horizonte, MG - Brazil',
       content:
-        'Today, I had a Kundalini session with Elane, and it focused on resolving past traumas. During the session, a past life came to me, one that I had already experienced through regression. My body became immobilized, and strong emotions surfaced. I was able to understand why I struggle to pursue my gifts and help others, due to traumas I experienced in other lives. I am deeply grateful—thank you, Elane. This technique was wonderful for me and helped me immensely.',
+        'Today, I had a Kundalini session with Elane, and it focused on resolving past traumas...',
     },
     {
       name: 'Samantha',
       city: 'Miami - FL - USA',
       content:
-        'My first experience with a Kundalini session guided by Elaine was truly unforgettable. The energy that flowed through me during the session felt like a gentle yet powerful wave, washing away the emotional blocks I wasn’t even aware I had. I felt a deep connection with myself and a renewed sense of purpose. Elaine’s guidance was compassionate and intuitive, making me feel safe throughout the entire process. After the session, I felt lighter, more centered, and incredibly grateful for this profound healing journey. I am excited to continue exploring this powerful technique.',
+        'My first experience with a Kundalini session guided by Elaine was truly unforgettable...',
     },
   ];
 
   const videoSources = [
-    '/videos/depoiment1.mp4',
-    '/videos/depoiment2.mp4',
-    '/videos/depoiment3.mp4',
-    '/videos/depoiment4.mp4',
-    '/videos/depoiment5.mp4',
-    '/videos/depoiment6.mp4',
+    '/videos/depoiment1_lowbitrate.mp4',
+    '/videos/depoiment2_lowbitrate.mp4',
+    '/videos/depoiment3_lowbitrate.mp4',
+    '/videos/depoiment4_lowbitrate.mp4',
+    '/videos/depoiment5_lowbitrate.mp4',
+    '/videos/depoiment6_lowbitrate.mp4',
   ];
 
   useGSAP(() => {
@@ -72,6 +75,38 @@ export default function TestimonialsSection({}: TestimonialsSectionProps) {
     );
   });
 
+  const handleVideoCanPlayThrough = (index: number) => {
+    console.log(`Video ${index} can play through`);
+    setVideoLoadingStates(prevStates => {
+      const newStates = [...prevStates];
+      newStates[index] = false; // Remove o spinner para o vídeo atual
+      console.log(
+        'Updated video loading states:',
+        newStates
+      );
+      return newStates;
+    });
+  };
+
+  const handleVideoLoaded = (index: number) => {
+    console.log('Video loaded for index:', index);
+    setVideoLoadingStates(prevStates => {
+      const newStates = [...prevStates];
+      newStates[index] = false;
+      console.log(
+        'Updated video loading states:',
+        newStates
+      );
+      return newStates;
+    });
+  };
+
+  useEffect(() => {
+    console.log(
+      'Updated video loading states:',
+      videoLoadingStates
+    );
+  }, [videoLoadingStates]);
   return (
     <section
       ref={sectionRef}
@@ -148,6 +183,11 @@ export default function TestimonialsSection({}: TestimonialsSectionProps) {
             className="relative aspect-w-16 aspect-h-9 rounded overflow-hidden shadow-lg cursor-pointer"
             onClick={() => setModalVideoSrc(videoSrc)}
           >
+            {/* {videoLoadingStates[index] && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
+                <div className="w-10 h-10 border-4 border-t-primary border-white rounded-full animate-spin"></div>
+              </div>
+            )} */}
             <video
               src={videoSrc}
               className="object-cover w-full h-full rounded"
@@ -155,12 +195,23 @@ export default function TestimonialsSection({}: TestimonialsSectionProps) {
               loop
               muted
               playsInline
+              preload="auto"
+              onLoadStart={() =>
+                console.log(
+                  `Video ${index} started loading`
+                )
+              }
+              onLoadedData={() => {
+                console.log(`Video ${index} loaded data`);
+                handleVideoLoaded(index);
+              }}
+              onCanPlayThrough={() =>
+                handleVideoCanPlayThrough(index)
+              }
             />
           </div>
         ))}
       </div>
-
-      <div className="text-center mt-16"></div>
 
       {modalVideoSrc && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
@@ -174,6 +225,7 @@ export default function TestimonialsSection({}: TestimonialsSectionProps) {
                 className="w-full h-full object-cover"
                 controls
                 autoPlay
+                preload="metadata"
               />
             </div>
             <button

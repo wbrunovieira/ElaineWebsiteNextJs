@@ -102,7 +102,6 @@ export default function Gallery() {
         <hr className="border-t border-muted w-full md:w-3/4 my-4 mx-auto" />
       </div>
 
-      {/* Photo Album */}
       <PhotoAlbum
         photos={photos}
         layout="masonry"
