@@ -36,7 +36,7 @@ export const options = [
     title: 'Online Session',
     description:
       'Experience Kundalini Activation from the comfort of your home.',
-    price: '$65.00',
+    price: '$80.00',
     link: 'https://online-session-link.com',
     icon: <FaVideo />,
   },
