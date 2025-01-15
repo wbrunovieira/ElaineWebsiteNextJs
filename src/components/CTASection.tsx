@@ -49,6 +49,7 @@ const CTASection = forwardRef<
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
+    if (!sectionRef.current) return;
     gsap.fromTo(
       sectionRef.current,
       { opacity: 0, y: 40 },

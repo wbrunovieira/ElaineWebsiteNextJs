@@ -3,7 +3,15 @@
 import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import ReactPlayer from 'react-player';
+
+import dynamic from 'next/dynamic';
+
+const DynamicReactPlayer = dynamic(
+  () => import('react-player'),
+  {
+    ssr: false,
+  }
+);
 
 interface Testimonial {
   name: string;
@@ -166,7 +174,7 @@ export default function TestimonialsSection({}: TestimonialsSectionProps) {
               </div>
             )}
             <div className="rounded shadow-xl hover:scale-110 transition-transform duration-300 hover:shadow-2xl hover:border-primary">
-              <ReactPlayer
+              <DynamicReactPlayer
                 url={videoSrc}
                 playing
                 loop
@@ -188,7 +196,7 @@ export default function TestimonialsSection({}: TestimonialsSectionProps) {
               className="relative w-full rounded overflow-hidden"
               style={{ aspectRatio: '16 / 9' }}
             >
-              <ReactPlayer
+              <DynamicReactPlayer
                 url={modalVideoSrc}
                 controls
                 playing

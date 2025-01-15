@@ -3,7 +3,15 @@
 import { useState } from 'react';
 
 import { GiMeditation } from 'react-icons/gi';
-import ReactPlayer from 'react-player';
+
+import dynamic from 'next/dynamic';
+
+const DynamicReactPlayer = dynamic(
+  () => import('react-player'),
+  {
+    ssr: false,
+  }
+);
 
 interface HeroSectionProps {
   videoSrc: string;
@@ -68,7 +76,8 @@ export default function HeroSection({
                 <div className="w-10 h-10 border-4 border-t-primary border-white rounded-full animate-spin"></div>
               </div>
             )}
-            <ReactPlayer
+
+            <DynamicReactPlayer
               url={videoSrc}
               playing
               loop
