@@ -1,7 +1,7 @@
 'use client';
-import gsap from 'gsap';
-import { useRef, useState } from 'react';
-import { useGSAP } from '@gsap/react';
+
+import { useState } from 'react';
+
 import { GiMeditation } from 'react-icons/gi';
 import ReactPlayer from 'react-player';
 
@@ -12,35 +12,14 @@ interface HeroSectionProps {
 export default function HeroSection({
   videoSrc,
 }: HeroSectionProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  useGSAP(
-    () => {
-      gsap.fromTo(
-        '.fade-in',
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          stagger: 0.2,
-          ease: 'power3.out',
-        }
-      );
-    },
-    { scope: containerRef }
-  );
 
   const handleVideoReady = () => {
     setIsLoading(false);
   };
 
   return (
-    <section
-      ref={containerRef}
-      className="container mx-auto px-4 py-12 md:py-24 lg:py-16 xl:py-6 relative min-h-screen flex items-center overflow-hidden"
-    >
+    <section className="container mx-auto px-4 py-12 md:py-24 lg:py-16 xl:py-6 relative min-h-screen flex items-center overflow-hidden">
       <div className="absolute inset-0 bg-background z-0"></div>
       <div className="absolute inset-0 bg-snake-watermark bg-cover bg-center opacity-50 scale-150 z-0"></div>
 
