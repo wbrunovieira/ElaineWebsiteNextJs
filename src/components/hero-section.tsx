@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { GiMeditation } from 'react-icons/gi';
+import ReactPlayer from 'react-player';
 
 interface HeroSectionProps {
   videoSrc: string;
@@ -31,7 +32,7 @@ export default function HeroSection({
     { scope: containerRef }
   );
 
-  const handleVideoLoaded = () => {
+  const handleVideoReady = () => {
     console.log('Video has loaded!');
     setIsLoading(false);
   };
@@ -89,14 +90,15 @@ export default function HeroSection({
                 <div className="w-10 h-10 border-4 border-t-primary border-white rounded-full animate-spin"></div>
               </div>
             )}
-            <video
-              src={videoSrc}
-              className="object-cover w-full h-full rounded"
-              autoPlay
+            <ReactPlayer
+              url={videoSrc}
+              playing
               loop
               muted
-              playsInline
-              onCanPlay={handleVideoLoaded}
+              width="100%"
+              height="100%"
+              onReady={handleVideoReady}
+              className="object-cover w-full h-full rounded"
             />
           </div>
         </div>

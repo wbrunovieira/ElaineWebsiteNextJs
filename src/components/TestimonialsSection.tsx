@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import ReactPlayer from 'react-player';
 
 interface Testimonial {
   name: string;
@@ -75,38 +76,14 @@ export default function TestimonialsSection({}: TestimonialsSectionProps) {
     );
   });
 
-  const handleVideoCanPlayThrough = (index: number) => {
-    console.log(`Video ${index} can play through`);
-    setVideoLoadingStates(prevStates => {
-      const newStates = [...prevStates];
-      newStates[index] = false; // Remove o spinner para o vídeo atual
-      console.log(
-        'Updated video loading states:',
-        newStates
-      );
-      return newStates;
-    });
-  };
-
-  const handleVideoLoaded = (index: number) => {
-    console.log('Video loaded for index:', index);
+  const handleVideoReady = (index: number) => {
     setVideoLoadingStates(prevStates => {
       const newStates = [...prevStates];
       newStates[index] = false;
-      console.log(
-        'Updated video loading states:',
-        newStates
-      );
       return newStates;
     });
   };
 
-  useEffect(() => {
-    console.log(
-      'Updated video loading states:',
-      videoLoadingStates
-    );
-  }, [videoLoadingStates]);
   return (
     <section
       ref={sectionRef}
@@ -180,35 +157,26 @@ export default function TestimonialsSection({}: TestimonialsSectionProps) {
         {videoSources.map((videoSrc, index) => (
           <div
             key={index}
-            className="relative aspect-w-16 aspect-h-9 rounded overflow-hidden shadow-lg cursor-pointer"
+            className="bg-gradient-to-r from-primary/40 via-background to-background relative aspect-w-16 aspect-h-9 rounded overflow-hidden shadow-lg cursor-pointer"
             onClick={() => setModalVideoSrc(videoSrc)}
           >
-            {/* {videoLoadingStates[index] && (
+            {videoLoadingStates[index] && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
                 <div className="w-10 h-10 border-4 border-t-primary border-white rounded-full animate-spin"></div>
               </div>
-            )} */}
-            <video
-              src={videoSrc}
-              className="object-cover w-full h-full rounded"
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              onLoadStart={() =>
-                console.log(
-                  `Video ${index} started loading`
-                )
-              }
-              onLoadedData={() => {
-                console.log(`Video ${index} loaded data`);
-                handleVideoLoaded(index);
-              }}
-              onCanPlayThrough={() =>
-                handleVideoCanPlayThrough(index)
-              }
-            />
+            )}
+            <div className="rounded shadow-xl hover:scale-110 transition-transform duration-300 hover:shadow-2xl hover:border-primary">
+              <ReactPlayer
+                url={videoSrc}
+                playing
+                loop
+                muted
+                width="100%"
+                height="100%"
+                onReady={() => handleVideoReady(index)}
+              />
+              <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/20 to-muted/10 blur-xl"></div>
+            </div>
           </div>
         ))}
       </div>
@@ -220,12 +188,12 @@ export default function TestimonialsSection({}: TestimonialsSectionProps) {
               className="relative w-full rounded overflow-hidden"
               style={{ aspectRatio: '16 / 9' }}
             >
-              <video
-                src={modalVideoSrc}
-                className="w-full h-full object-cover"
+              <ReactPlayer
+                url={modalVideoSrc}
                 controls
-                autoPlay
-                preload="metadata"
+                playing
+                width="100%"
+                height="100%"
               />
             </div>
             <button
