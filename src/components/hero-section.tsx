@@ -33,20 +33,19 @@ export default function HeroSection({
   );
 
   const handleVideoReady = () => {
-    console.log('Video has loaded!');
     setIsLoading(false);
   };
 
   return (
     <section
       ref={containerRef}
-      className="container mx-auto px-4 py-12 md:py-24 lg:py-16 xl:py-6 relative min-h-screen flex items-center"
+      className="container mx-auto px-4 py-12 md:py-24 lg:py-16 xl:py-6 relative min-h-screen flex items-center overflow-hidden"
     >
       <div className="absolute inset-0 bg-background z-0"></div>
       <div className="absolute inset-0 bg-snake-watermark bg-cover bg-center opacity-50 scale-150 z-0"></div>
 
-      <div className="relative grid grid-cols-1 md:grid-cols-2 items-center gap-8 md:gap-16 z-10">
-        <div className="flex flex-col items-center md:items-start text-center md:text-left bg-background p-4 rounded-lg shadow-md">
+      <div className="relative grid grid-cols-1 md:grid-cols-2 items-center gap-8 md:gap-16 z-10 w-full">
+        <div className="flex flex-col items-center md:items-start text-center md:text-left bg-background p-4 rounded-lg shadow-md w-full">
           <div className="flex justify-center md:justify-start items-center mb-4 fade-in">
             <GiMeditation className="text-primary h-10 w-10 mr-4" />
             <p className="text-sm text-primary font-lato tracking-tight fade-in -mb-1">
