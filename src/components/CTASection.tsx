@@ -20,6 +20,7 @@ interface CTASectionProps {
     price: string;
     link: string;
     icon: JSX.Element;
+    date: string;
   }[];
 }
 
@@ -29,16 +30,18 @@ export const options = [
     description:
       'Join us in a transformative in-person Kundalini Activation session.',
     price: '$80.00',
-    link: 'https://www.eventbrite.com/e/1135200829239?aff=oddtdtcreator',
+    link: 'https://www.eventbrite.com/e/1203759419829?aff=oddtdtcreator',
     icon: <FaMapMarkerAlt />,
+    date: '15/Feb',
   },
   {
     title: 'Online Session',
     description:
       'Experience Kundalini Activation from the comfort of your home.',
     price: '$80.00',
-    link: 'https://online-session-link.com',
+    link: 'https://www.eventbrite.com/e/1203627294639?aff=oddtdtcreator',
     icon: <FaVideo />,
+    date: '15/Feb',
   },
 ];
 
@@ -73,6 +76,7 @@ const CTASection = forwardRef<
     link: option.link,
     icon: option.icon,
     price: option.price,
+    date: option.date,
   }));
 
   return (
@@ -96,7 +100,12 @@ const CTASection = forwardRef<
           Choose Below group online or in-person:
         </h4>
 
-        <HoverEffect items={hoverItems} />
+        <HoverEffect
+          items={hoverItems.map(item => ({
+            ...item,
+            title: `${item.title} - ${item.date}`,
+          }))}
+        />
       </div>
     </section>
   );

@@ -74,7 +74,7 @@ export const HoverEffect = ({
               {item.price && (
                 <p
                   className={cn(
-                    'text-primary p-4 mt-8 font-extrabold text-4xl rounded',
+                    'bg-primary text-background p-4 mt-8 font-extrabold text-4xl rounded',
                     'shadow-[0px_0px_10px_rgba(0,0,0,0.42)]'
                   )}
                 >

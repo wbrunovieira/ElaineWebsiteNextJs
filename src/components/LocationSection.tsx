@@ -43,7 +43,7 @@ export default function LocationSection() {
     >
       <div className="text-center max-w-2xl mx-auto mb-12">
         <h2 className="text-2xl md:text-4xl font-playfair font-bold text-primary mb-4">
-          Event Location
+          Event Location: On-Site Details
         </h2>
         <hr className="border-t border-muted w-full md:w-3/4 my-4 mx-auto fade-in" />
         <p className="text-lg md:text-xl font-lato text-muted-foreground leading-relaxed">
@@ -53,9 +53,7 @@ export default function LocationSection() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        {/* Map Section */}
         <div className="w-full rounded-lg overflow-hidden shadow-lg location-item">
-          {/* Icons above the map */}
           <div className="flex justify-center space-x-6 mb-4">
             <a
               href="https://www.google.com/maps/place/Fun%26Flow/@26.1504671,-80.1340523,17z/"
@@ -110,7 +108,7 @@ export default function LocationSection() {
                 Date
               </h3>
               <p className="text-muted-foreground font-lato">
-                January 18th, 2025
+                February 15th, 2025
               </p>
             </div>
           </div>
