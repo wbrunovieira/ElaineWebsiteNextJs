@@ -52,11 +52,13 @@ export default function RootLayout({
         />
         <meta
           property="og:image"
-          content="/kundalini-icon.png"
+          content="https://www.elainevieira-us.com/kundalini-icon-rectangular-1200x630.jpg"
         />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta
           property="og:url"
-          content="https://www.elainevieira-us.com/kundalini-activation-session"
+          content="https://www.elainevieira-us.com/"
         />
         <meta property="og:type" content="event" />
         <meta property="og:locale" content="en_US" />
@@ -116,7 +118,7 @@ export default function RootLayout({
                 },
               },
               image: [
-                'https://www.https://www.elainevieira-us.com/kundalini-icon.png',
+                'https://www.elainevieira-us.com/kundalini-icon-rectangular-1200x630.jpg',
               ],
               organizer: {
                 '@type': 'Organization',
@@ -125,7 +127,7 @@ export default function RootLayout({
               },
               offers: {
                 '@type': 'Offer',
-                url: 'https://www.elainevieira-us.com/kundalini-activation-session',
+                url: 'https://www.elainevieira-us.com/',
                 price: '80',
                 priceCurrency: 'USD',
                 availability: 'https://schema.org/InStock',
