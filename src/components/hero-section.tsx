@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { GiMeditation } from 'react-icons/gi';
 
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 
 const DynamicReactPlayer = dynamic(
   () => import('react-player'),
@@ -30,15 +31,22 @@ export default function HeroSection({
     <section className="container mx-auto px-4 py-12 md:py-24 lg:py-16 xl:py-6 relative min-h-screen flex items-center overflow-hidden">
       <div className="absolute inset-0 bg-background z-0"></div>
       <div className="absolute inset-0 bg-snake-watermark bg-cover bg-center opacity-50 scale-150 z-0"></div>
-
+      <div></div>
       <div className="relative grid grid-cols-1 md:grid-cols-2 items-center gap-8 md:gap-16 z-10 w-full">
         <div className="flex flex-col items-center md:items-start text-center md:text-left bg-background p-4 rounded-lg shadow-md w-full">
           <div className="flex justify-center md:justify-start items-center mb-4 fade-in">
-            <GiMeditation className="text-primary h-10 w-10 mr-4" />
-            <p className="text-sm text-primary font-lato tracking-tight fade-in -mb-1">
-              Awaken the Power Within –
-            </p>
+            <Image
+              src="/images/logo_kundalini-transparent.png"
+              width={160}
+              height={160}
+              alt="Hero Background"
+              objectFit="cover"
+              objectPosition="center"
+            />
           </div>
+          <p className="text-lg text-primary font-lato tracking-tight fade-in -mb-1 -mt-4">
+            Awaken the Power Within –
+          </p>
 
           <h1 className="font-playfair uppercase font-bold tracking-wider text-3xl md:text-5xl whitespace-pre-wrap leading-tight fade-in">
             Kundalini Activation
@@ -58,10 +66,10 @@ export default function HeroSection({
             This in-person Kundalini Activation session is
             designed to awaken your inner power, release
             emotional blockages, and reconnect you with your{' '}
-            <span className="text-primary font-bold font-lato">
-              highest self
+            <span className="text-primary font-bold font-lato no-whitespace">
+              highest self.
+              <GiMeditation className="text-primary h-10 w-10 mr-4" />
             </span>
-            .
           </p>
           <hr className="border-t border-muted w-1/2 md:w-1/3 my-4 fade-in" />
           <p className="text-base font-lato font-extralight mt-2 fade-in">

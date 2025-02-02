@@ -41,7 +41,7 @@ export const options = [
     price: '$80.00',
     link: 'https://www.eventbrite.com/e/1203627294639?aff=oddtdtcreator',
     icon: <FaVideo />,
-    date: '15/Feb',
+    date: '05/Feb',
   },
 ];
 
@@ -83,12 +83,12 @@ const CTASection = forwardRef<
     <section
       ref={ref || sectionRef}
       className={cn(
-        'container mx-auto px-6 py-4 rounded md:py-4 bg-gradient-to-r from-primary/80 via-primary to-destructive text-card text-center shadow-xl relative'
+        'container mx-auto px-6 py-8 rounded md:py-4 bg-gradient-to-r from-primary/80 via-primary to-destructive text-card text-center shadow-xl relative'
       )}
     >
       <div className="max-w-4xl mx-auto">
         <div className="mb-2">
-          <h2 className="text-5xl md:text-6xl font-bold font-playfair mb-4 tracking-wide text-background">
+          <h2 className="text-5xl md:text-6xl font-bold font-playfair mb-4 tracking-wide text-background p-4">
             {ctaText}
           </h2>
           <hr className="border-t border-card w-1/2 mx-auto my-2" />
@@ -96,7 +96,7 @@ const CTASection = forwardRef<
             {description}
           </p>
         </div>
-        <h4 className="text-xl md:text-xl font-lato leading-relaxed text-muted-foreground mt-4">
+        <h4 className="text-xl md:text-xl font-lato leading-relaxed text-muted-foreground md:-mb-48">
           Choose Below group online or in-person:
         </h4>
 

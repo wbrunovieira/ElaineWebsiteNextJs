@@ -52,7 +52,7 @@ export default function RootLayout({
         />
         <meta
           property="og:image"
-          content="https://www.elainevieira-us.com/kundalini-icon-rectangular-1200x630.jpg"
+          content="/images/logo_kundalini-transparent.png"
         />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -76,18 +76,18 @@ export default function RootLayout({
         />
         <meta
           name="twitter:image"
-          content="/kundalini-icon.png"
+          content="/images/logo_kundalini-transparent.png"
         />
 
         <link
           rel="icon"
-          href="/kundalini-icon.ico"
+          href="/images/logo_kundalini-transparent.png"
           sizes="any"
         />
 
         <link
           rel="apple-touch-icon"
-          href="/kundalini-icon.png"
+          href="/images/logo_kundalini-transparent.png"
         />
 
         <script
@@ -118,7 +118,7 @@ export default function RootLayout({
                 },
               },
               image: [
-                'https://www.elainevieira-us.com/kundalini-icon-rectangular-1200x630.jpg',
+                '/images/logo_kundalini-transparent.png',
               ],
               organizer: {
                 '@type': 'Organization',

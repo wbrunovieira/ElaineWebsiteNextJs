@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import {
   FaInstagram,
   FaTiktok,
@@ -10,8 +11,18 @@ import {
 
 export const Footer = () => {
   return (
-    <footer className="bg-gradient-to-b from-primary via-primary/90 to-primary/80 text-white py-12 px-6 mt-16">
-      <div className="container mx-auto">
+    <footer className="relative bg-gradient-to-b from-primary via-primary/90 to-primary/80 text-white py-12 px-6 mt-16 overflow-hidden">
+      <Image
+        src="/images/logo_kundalini-transparent.png"
+        width={360}
+        height={360}
+        alt="Hero Background"
+        objectFit="cover"
+        objectPosition="center"
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-15 pointer-events-none"
+      />
+
+      <div className="relative container mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-lg font-semibold tracking-wide uppercase mb-4">
             Follow Us
@@ -57,7 +68,7 @@ export const Footer = () => {
         </div>
 
         <div className="grid grid-cols-1 justify-between items-start border-t border-gray-400 md:grid-cols-2 gap-8 mb-8 p-8 w-full">
-          <div className="text-left md:text-left">
+          <div className="text-left">
             <h3 className="font-bold text-xl mb-4">
               About Us
             </h3>
@@ -67,7 +78,7 @@ export const Footer = () => {
               manipulation, specializing in techniques such
               as dowsing, energy balancing, and spiritual
               harmonization.
-            </p>{' '}
+            </p>
             <br />
             <p className="text-sm text-gray-200 leading-relaxed">
               Her mission is to help individuals align their
@@ -82,10 +93,9 @@ export const Footer = () => {
             <h3 className="font-bold text-xl mb-4">
               Contact
             </h3>
-
-            <div className="flex flex-col items-end md:text-right gap-2">
+            <div className="flex flex-col items-end gap-2">
               <div>Elaine Vieira</div>
-              <div className="flex items-center md:text-right gap-2">
+              <div className="flex items-center gap-2">
                 <FaMapMarkerAlt className="text-lg" />
                 <span>Florida - USA</span>
               </div>
@@ -110,8 +120,6 @@ export const Footer = () => {
                 </a>
               </div>
             </div>
-
-            <div className="flex flex-col items-center md:items-start gap-4"></div>
           </div>
         </div>
 
