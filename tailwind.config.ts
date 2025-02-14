@@ -10,16 +10,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#F5EDE1', // Bege suave como cor base
-        foreground: '#2B2D42', // Cinza escuro para textos
-        primary: '#E63946', // Vermelho rubi
-        secondary: '#F4A261', // Laranja pastel
-        accent: '#06D6A0', // Verde água
-        muted: '#8D99AE', // Cinza azulado
-        border: '#E0E0E0', // Cinza claro para bordas
-        card: '#FFFFFF', // Branco puro para cartões
-        input: '#FFFFFF', // Branco puro para inputs
-        destructive: '#D90429', // Vermelho intenso para alertas
+        background: '#F5EDE1',
+        foreground: '#2B2D42',
+        primary: '#E63946',
+        secondary: '#1D6D45',
+        accent: '#06D6A0',
+        muted: '#8D99AE',
+        border: '#E0E0E0',
+        card: '#FFFFFF',
+        input: '#FFFFFF',
+        destructive: '#D90429',
       },
       aspectRatio: {
         '16/9': '16 / 9',
@@ -33,6 +33,32 @@ export default {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      keyframes: {
+        'accordion-down': {
+          from: {
+            height: '0',
+          },
+          to: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+        },
+        'accordion-up': {
+          from: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+          to: {
+            height: '0',
+          },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
+      },
+      backgroundImage: {
+        'snake-watermark':
+          "url('/images/snake-marcadagua.png')",
       },
     },
   },
