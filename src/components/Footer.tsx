@@ -16,7 +16,7 @@ export const Footer = () => {
         src="/images/elaine-logo-new-nobackground.png"
         width={360}
         height={360}
-        alt="Hero Background"
+        alt="Elaine Vieira - Kundalini Activation"
         style={{ objectFit: 'cover', objectPosition: 'center' }}
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-15 pointer-events-none"
       />

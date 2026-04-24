@@ -39,7 +39,7 @@ export default function HeroSection({
               src="/images/elaine-logo-new-nobackground.png"
               width={160}
               height={160}
-              alt="Hero Background"
+              alt="Elaine Vieira - Kundalini Activation"
               style={{ objectFit: 'cover', objectPosition: 'center' }}
             />
           </div>
