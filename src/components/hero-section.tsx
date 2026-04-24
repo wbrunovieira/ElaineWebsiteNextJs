@@ -40,8 +40,7 @@ export default function HeroSection({
               width={160}
               height={160}
               alt="Hero Background"
-              objectFit="cover"
-              objectPosition="center"
+              style={{ objectFit: 'cover', objectPosition: 'center' }}
             />
           </div>
           <p className="text-lg text-primary font-lato tracking-tight fade-in -mb-1 -mt-4">
