@@ -166,11 +166,19 @@ export default function Gallery() {
         render={{ image: renderNextImage }}
         defaultContainerWidth={1200}
         sizes={{
-          size: '1168px',
+          size: 'calc((1168px - 60px) / 4)',
           sizes: [
             {
+              viewport: '(max-width: 400px)',
+              size: 'calc((100vw - 32px - 10px) / 2)',
+            },
+            {
+              viewport: '(max-width: 800px)',
+              size: 'calc((100vw - 32px - 20px) / 3)',
+            },
+            {
               viewport: '(max-width: 1200px)',
-              size: 'calc(100vw - 32px)',
+              size: 'calc((100vw - 32px - 60px) / 4)',
             },
           ],
         }}

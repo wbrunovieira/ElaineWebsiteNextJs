@@ -58,7 +58,7 @@ export default {
       },
       backgroundImage: {
         'snake-watermark':
-          "url('/images/snake-marcadagua.png')",
+          "url('/images/snake-marcadagua.webp')",
       },
     },
   },
