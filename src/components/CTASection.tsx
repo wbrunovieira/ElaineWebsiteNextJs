@@ -45,7 +45,7 @@ export const options = [
     price: '$80.00',
     link: 'https://www.eventbrite.com/e/kundalini-activation-orlando-tickets-1232399583329',
     icon: <FaMapMarkerAlt />,
-    date: '22/Mar',
+    date: '22/Fev',
     local: 'Orlando',
     horario: '2:00 PM',
   },
