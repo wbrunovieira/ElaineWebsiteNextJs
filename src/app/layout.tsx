@@ -91,12 +91,18 @@ const jsonLd = [
       name: 'Elaine Vieira',
       url: 'https://www.elainevieira-us.com',
     },
+    performer: {
+      '@type': 'Person',
+      name: 'Elaine Vieira',
+      url: 'https://www.elainevieira-us.com',
+    },
     offers: {
       '@type': 'Offer',
       url: 'https://www.eventbrite.com/e/kundalini-activation-fort-lauderdale-tickets-1249460673509',
       price: '80',
       priceCurrency: 'USD',
       availability: 'https://schema.org/InStock',
+      validFrom: '2025-12-01',
     },
   },
   {
@@ -127,12 +133,18 @@ const jsonLd = [
       name: 'Elaine Vieira',
       url: 'https://www.elainevieira-us.com',
     },
+    performer: {
+      '@type': 'Person',
+      name: 'Elaine Vieira',
+      url: 'https://www.elainevieira-us.com',
+    },
     offers: {
       '@type': 'Offer',
       url: 'https://www.eventbrite.com/e/kundalini-activation-orlando-tickets-1232399583329',
       price: '80',
       priceCurrency: 'USD',
       availability: 'https://schema.org/InStock',
+      validFrom: '2025-12-01',
     },
   },
   {
@@ -157,12 +169,18 @@ const jsonLd = [
       name: 'Elaine Vieira',
       url: 'https://www.elainevieira-us.com',
     },
+    performer: {
+      '@type': 'Person',
+      name: 'Elaine Vieira',
+      url: 'https://www.elainevieira-us.com',
+    },
     offers: {
       '@type': 'Offer',
       url: 'https://www.eventbrite.com/e/kundalini-activation-on-line-tickets-1249527633789',
       price: '65',
       priceCurrency: 'USD',
       availability: 'https://schema.org/InStock',
+      validFrom: '2025-12-01',
     },
   },
 ];
