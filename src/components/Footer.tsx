@@ -13,7 +13,7 @@ export const Footer = () => {
   return (
     <footer className="relative bg-gradient-to-b from-primary via-primary/90 to-primary/80 text-white py-12 px-6 mt-16 overflow-hidden">
       <Image
-        src="/images/elaine-logo-new-nobackground.png"
+        src="/images/elaine-logo-new-nobackground.webp"
         width={360}
         height={360}
         alt="Elaine Vieira - Kundalini Activation"

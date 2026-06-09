@@ -36,10 +36,11 @@ export default function HeroSection({
         <div className="flex flex-col items-center md:items-start text-center md:text-left bg-background p-4 rounded-lg shadow-md w-full">
           <div className="flex justify-center md:justify-start items-center mb-4 fade-in">
             <Image
-              src="/images/elaine-logo-new-nobackground.png"
+              src="/images/elaine-logo-new-nobackground.webp"
               width={160}
               height={160}
               alt="Elaine Vieira - Kundalini Activation"
+              priority
               style={{ objectFit: 'cover', objectPosition: 'center' }}
             />
           </div>
