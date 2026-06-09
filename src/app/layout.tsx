@@ -61,6 +61,13 @@ export const metadata: Metadata = {
   },
 };
 
+// NOTE: Event structured data temporarily DISABLED — there are no confirmed dates yet.
+// Google's Event schema REQUIRES a valid ISO `startDate`; empty/text/past dates make the
+// event invalid (dropped from rich results + Search Console errors). The sessions are
+// currently presented as recurring/periodic on the page (see CTASection cards).
+// TO RESTORE: uncomment this array AND the <script> in <head> below, then set real
+// startDate/endDate (ISO 8601, e.g. '2026-07-15T19:00:00-05:00') for each event.
+/*
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -184,6 +191,7 @@ const jsonLd = [
     },
   },
 ];
+*/
 
 export default function RootLayout({
   children,
@@ -196,10 +204,12 @@ export default function RootLayout({
       className={`${playfairDisplay.className} ${lato.className}`}
     >
       <head>
+        {/* Re-enable once `jsonLd` (Event dates) is restored above:
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        */}
       </head>
       <body>{children}</body>
     </html>

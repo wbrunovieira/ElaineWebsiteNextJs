@@ -34,7 +34,8 @@ export const options = [
     price: '$80.00',
     link: 'https://www.eventbrite.com/e/kundalini-activation-fort-lauderdale-tickets-1249460673509',
     icon: <FaMapMarkerAlt />,
-    date: '15/Mar',
+    // Recurring sessions — no fixed date for now. Restore the real date once confirmed (was '15/Mar').
+    date: 'Coming soon',
     local: 'Fort Lauderdale',
     horario: '1:00 PM',
   },
@@ -45,7 +46,8 @@ export const options = [
     price: '$80.00',
     link: 'https://www.eventbrite.com/e/kundalini-activation-orlando-tickets-1232399583329',
     icon: <FaMapMarkerAlt />,
-    date: '22/Fev',
+    // Recurring sessions — no fixed date for now. Restore the real date once confirmed (was '22/Fev').
+    date: 'Coming soon',
     local: 'Orlando',
     horario: '2:00 PM',
   },
@@ -56,7 +58,8 @@ export const options = [
     price: '$65.00',
     link: 'https://www.eventbrite.com/e/kundalini-activation-on-line-tickets-1249527633789',
     icon: <FaVideo />,
-    date: '06/Mar',
+    // Recurring sessions — no fixed date for now. Restore the real date once confirmed (was '06/Mar').
+    date: 'Coming soon',
     horario: '7:00 PM',
   },
 ];

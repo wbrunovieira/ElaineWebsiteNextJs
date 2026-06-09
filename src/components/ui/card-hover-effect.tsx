@@ -74,12 +74,12 @@ export const HoverEffect = ({
               <div className="flex flex-col items-center justify-center w-full bg-primary  p-4 rounded">
                 {item.local && (
                   <p className="text-center text-sm text-muted-foreground ">
-                    Local: {item.local}
+                    Location: {item.local}
                   </p>
                 )}
                 {item.horario && (
                   <p className="text-center text-sm text-muted-foreground ">
-                    Horário: {item.horario}
+                    Time: {item.horario}
                   </p>
                 )}
               </div>
