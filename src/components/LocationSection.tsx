@@ -19,7 +19,8 @@ const locations = [
   {
     id: 'ftlauderdale',
     name: 'Fun&Flow - Fort Lauderdale, FL',
-    date: 'March 15th, 2025',
+    // Recurring sessions — restore the real date once confirmed (was 'March 15th, 2025').
+    date: 'Coming soon',
     time: '1:00 PM - 3:00 PM',
     googleMapsUrl:
       'https://www.google.com/maps/place/Fun%26Flow/@26.1504671,-80.1340523,17z/',
@@ -31,7 +32,8 @@ const locations = [
   {
     id: 'orlando',
     name: 'Orlando, FL',
-    date: 'February 22th, 2025',
+    // Recurring sessions — restore the real date once confirmed (was 'February 22th, 2025').
+    date: 'Coming soon',
     time: '2:00 PM - 4:00 PM',
     googleMapsUrl:
       'https://www.google.com/maps/dir/?api=1&destination=28.501995075736172,-81.35706202450397',
