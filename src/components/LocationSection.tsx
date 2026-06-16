@@ -11,40 +11,15 @@ import {
   FaGoogle,
   FaWaze,
 } from 'react-icons/fa';
+import type { LocationItem } from '@/lib/content';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Dados dos locais
-const locations = [
-  {
-    id: 'ftlauderdale',
-    name: 'Fun&Flow - Fort Lauderdale, FL',
-    // Recurring sessions — restore the real date once confirmed (was 'March 15th, 2025').
-    date: 'Coming soon',
-    time: '1:00 PM - 3:00 PM',
-    googleMapsUrl:
-      'https://www.google.com/maps/place/Fun%26Flow/@26.1504671,-80.1340523,17z/',
-    wazeUrl:
-      'https://ul.waze.com/ul?ll=26.150467,-80.134052&navigate=yes',
-    mapEmbedSrc:
-      'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3851.7962910119254!2d-80.1340522720193!3d26.15046716770682!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d901bd541b449d%3A0xec3f2a005e9a564b!2sFunk%26Flow!5e0!3m2!1sen!2sbr!4v1736451372227!5m2!1sen!2sbr',
-  },
-  {
-    id: 'orlando',
-    name: 'Orlando, FL',
-    // Recurring sessions — restore the real date once confirmed (was 'February 22th, 2025').
-    date: 'Coming soon',
-    time: '2:00 PM - 4:00 PM',
-    googleMapsUrl:
-      'https://www.google.com/maps/dir/?api=1&destination=28.501995075736172,-81.35706202450397',
-    wazeUrl:
-      'https://waze.com/ul?ll=28.501995075736172,-81.35706202450397&navigate=yes',
-    mapEmbedSrc:
-      'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3506.254323478002!2d-81.35706202450397!3d28.501995075736172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88e77b5b306e824d%3A0x1df49cecc3f01344!2s2006%20White%20Ave%2C%20Orlando%2C%20FL%2032806%2C%20USA!5e0!3m2!1sen!2sbr!4v1739569186057!5m2!1sen!2sbr',
-  },
-];
-
-export default function LocationSection() {
+export default function LocationSection({
+  locations,
+}: {
+  locations: LocationItem[];
+}) {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {

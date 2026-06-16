@@ -7,7 +7,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 import { cn } from '@/lib/utils';
 import { HoverEffect } from './ui/card-hover-effect';
-import { FaMapMarkerAlt, FaVideo } from 'react-icons/fa';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,44 +24,6 @@ interface CTASectionProps {
     horario?: string;
   }[];
 }
-
-export const options = [
-  {
-    title: 'In-Person Session',
-    description:
-      'Join us in a transformative in-person Kundalini Activation session.',
-    price: '$80.00',
-    link: 'https://www.eventbrite.com/e/kundalini-activation-fort-lauderdale-tickets-1249460673509',
-    icon: <FaMapMarkerAlt />,
-    // Recurring sessions — no fixed date for now. Restore the real date once confirmed (was '15/Mar').
-    date: 'Coming soon',
-    local: 'Fort Lauderdale',
-    horario: '1:00 PM',
-  },
-  {
-    title: 'In-Person Session',
-    description:
-      'Join us in a transformative in-person Kundalini Activation session.',
-    price: '$80.00',
-    link: 'https://www.eventbrite.com/e/kundalini-activation-orlando-tickets-1232399583329',
-    icon: <FaMapMarkerAlt />,
-    // Recurring sessions — no fixed date for now. Restore the real date once confirmed (was '22/Fev').
-    date: 'Coming soon',
-    local: 'Orlando',
-    horario: '2:00 PM',
-  },
-  {
-    title: 'Online Session',
-    description:
-      'Experience Kundalini Activation from the comfort of your home.',
-    price: '$65.00',
-    link: 'https://www.eventbrite.com/e/kundalini-activation-on-line-tickets-1249527633789',
-    icon: <FaVideo />,
-    // Recurring sessions — no fixed date for now. Restore the real date once confirmed (was '06/Mar').
-    date: 'Coming soon',
-    horario: '7:00 PM',
-  },
-];
 
 const CTASection = forwardRef<
   HTMLDivElement,

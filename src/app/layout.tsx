@@ -211,7 +211,10 @@ export default function RootLayout({
         />
         */}
       </head>
-      <body>{children}</body>
+      {/* suppressHydrationWarning: browser extensions (e.g. crypto wallets)
+          and GSAP inject attributes/styles on <body> before React hydrates,
+          which would otherwise log a hydration mismatch warning. */}
+      <body suppressHydrationWarning>{children}</body>
     </html>
   );
 }

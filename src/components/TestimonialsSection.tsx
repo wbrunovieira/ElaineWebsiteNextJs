@@ -5,6 +5,7 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
 import dynamic from 'next/dynamic';
+import type { Story } from '@/lib/content';
 
 const DynamicReactPlayer = dynamic(
   () => import('react-player'),
@@ -13,17 +14,14 @@ const DynamicReactPlayer = dynamic(
   }
 );
 
-interface Testimonial {
-  name: string;
-  city: string;
-  content: string;
-}
-
 interface TestimonialsSectionProps {
+  stories: Story[];
   onActionClick?: () => void;
 }
 
-export default function TestimonialsSection({}: TestimonialsSectionProps) {
+export default function TestimonialsSection({
+  stories,
+}: TestimonialsSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   const [modalVideoSrc, setModalVideoSrc] = useState<
@@ -34,27 +32,6 @@ export default function TestimonialsSection({}: TestimonialsSectionProps) {
   >(null);
   const [videoLoadingStates, setVideoLoadingStates] =
     useState<boolean[]>(Array(6).fill(true));
-
-  const testimonials: Testimonial[] = [
-    {
-      name: 'Enda',
-      city: 'Dally Pembroke Pines - Fort Lauderdale - FL - USA',
-      content:
-        'I have participated in Kundalini sessions twice, and both experiences were truly transformative. I have been working with Elaine for over a year, during which she has provided me with a variety of treatments and therapies. However, I must say that the Kundalini sessions have been the most impactful for me. Having faced significant trauma a year and a half ago, Elaine has been instrumental in supporting my healing journey. Despite only having two Kundalini sessions, the experience has been life-changing. Each session brought about a profound sense of release, as though a heavy burden I&apos;ve been carrying was lifted. While I acknowledge that my healing process is ongoing, I wholeheartedly recommend a Kundalini session with Elaine. Her expertise and care make it an experience you won&apos;t regret.',
-    },
-    {
-      name: 'Maicy',
-      city: 'Belo Horizonte, MG - Brazil',
-      content:
-        'Today, I had a Kundalini session with Elane, and it focused on resolving past traumas. During the session, a past life came to me, one that I had already experienced through regression. My body became immobilized, and strong emotions surfaced. I was able to understand why I struggle to pursue my gifts and help others, due to traumas I experienced in other lives. I am deeply grateful—thank you, Elane. This technique was wonderful for me and helped me immensely.',
-    },
-    {
-      name: 'Samantha',
-      city: 'Miami - FL - USA',
-      content:
-        'My first experience with a Kundalini session guided by Elaine was truly unforgettable. The energy that flowed through me during the session felt like a gentle yet powerful wave, washing away the emotional blocks I wasn’t even aware I had. I felt a deep connection with myself and a renewed sense of purpose. Elaine’s guidance was compassionate and intuitive, making me feel safe throughout the entire process. After the session, I felt lighter, more centered, and incredibly grateful for this profound healing journey. I am excited to continue exploring this powerful technique.',
-    },
-  ];
 
   const videoSources = [
     '/videos/depoiment1_lowbitrate.mp4',
@@ -106,52 +83,41 @@ export default function TestimonialsSection({}: TestimonialsSectionProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-        {testimonials.map((testimonial, index) => {
+        {stories.map((story, index) => {
           const isExpanded = expandedIndex === index;
           const contentToShow = isExpanded
-            ? testimonial.content
-            : testimonial.content.slice(0, 150);
-
-          console.log({
-            index,
-            isExpanded,
-            contentToShow,
-            contentLength: testimonial.content.length,
-          });
+            ? story.content
+            : story.content.slice(0, 150);
 
           return (
             <div
-              key={index}
+              key={story.id}
               className="testimonial-card bg-card shadow-md rounded p-6 flex flex-col justify-between"
             >
               <p className="text-lg italic text-muted-foreground mb-4">
                 &quot;{contentToShow}&quot;
-                {testimonial.content.length > 150 &&
+                {story.content.length > 150 &&
                   !isExpanded &&
                   '...'}
               </p>
-              {testimonial.content.length > 150 && (
+              {story.content.length > 150 && (
                 <button
                   className="text-primary text-sm underline mt-2"
-                  onClick={() => {
-                    console.log('Button clicked:', {
-                      index,
-                      isExpanded,
-                    });
+                  onClick={() =>
                     setExpandedIndex(
                       isExpanded ? null : index
-                    );
-                  }}
+                    )
+                  }
                 >
                   {isExpanded ? 'Read Less' : 'Read More'}
                 </button>
               )}
               <div className="text-right mt-4">
                 <p className="font-bold text-primary">
-                  {testimonial.name}
+                  {story.name}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {testimonial.city}
+                  {story.city}
                 </p>
               </div>
             </div>
