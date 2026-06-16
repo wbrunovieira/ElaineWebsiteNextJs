@@ -39,16 +39,27 @@ const session = z.object({
   horario: z.string().optional(),
 });
 
+const videoTestimonial = z.object({
+  id: z.string().min(1),
+  title: z.string().optional(),
+  muxPlaybackId: z.string().optional(),
+  muxAssetId: z.string().optional(),
+  src: z.string().optional(),
+});
+
 export const siteContentSchema = z.object({
   gallery: z.array(galleryPhoto),
   stories: z.array(story),
   locations: z.array(location),
   sessions: z.array(session),
+  videoTestimonials: z.array(videoTestimonial),
 });
 
 /** Rejects payloads whose `id`s are not unique within a section. */
 function hasUniqueIds(content: SiteContent): boolean {
-  return (['gallery', 'stories', 'locations', 'sessions'] as const).every(
+  return (
+    ['gallery', 'stories', 'locations', 'sessions', 'videoTestimonials'] as const
+  ).every(
     key => {
       const ids = content[key].map(item => item.id);
       return new Set(ids).size === ids.length;

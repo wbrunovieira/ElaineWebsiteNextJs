@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import imageCompression from 'browser-image-compression';
 import {
@@ -19,6 +19,7 @@ import {
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import * as UpChunk from '@mux/upchunk';
 import { reorderById } from '@/lib/gallery';
 import type {
   SiteContent,
@@ -26,16 +27,26 @@ import type {
   SessionOption,
   LocationItem,
   GalleryPhoto,
+  VideoTestimonial,
 } from '@/lib/content';
 
-type Tab = 'gallery' | 'stories' | 'sessions' | 'locations';
+type Tab =
+  | 'gallery'
+  | 'stories'
+  | 'sessions'
+  | 'locations'
+  | 'videos';
 
 const TABS: { key: Tab; label: string }[] = [
   { key: 'gallery', label: 'Galeria' },
+  { key: 'videos', label: 'Vídeos' },
   { key: 'stories', label: 'Depoimentos' },
   { key: 'sessions', label: 'Sessões' },
   { key: 'locations', label: 'Locais' },
 ];
+
+// Mux Free plan stores up to 10 videos at a time.
+const MAX_VIDEOS = 10;
 
 const newId = () =>
   `id-${Math.random().toString(36).slice(2, 9)}-${Date.now().toString(36)}`;
@@ -90,6 +101,33 @@ async function makeBlur(file: File): Promise<string> {
   }
 }
 
+interface MuxStatusResult {
+  status: 'processing' | 'ready' | 'error';
+  assetId?: string;
+  playbackId?: string;
+}
+
+/** Polls the Mux status endpoint until the asset is ready/errored. */
+async function pollMuxStatus(
+  uploadId: string,
+  maxMs = 5 * 60 * 1000
+): Promise<MuxStatusResult> {
+  const deadline = Date.now() + maxMs;
+  while (Date.now() < deadline) {
+    const res = await fetch(
+      `/api/admin/mux/status?uploadId=${encodeURIComponent(uploadId)}`
+    );
+    if (res.ok) {
+      const data = (await res.json()) as MuxStatusResult;
+      if (data.status === 'ready' || data.status === 'error') {
+        return data;
+      }
+    }
+    await new Promise(r => setTimeout(r, 3000));
+  }
+  return { status: 'error' };
+}
+
 export default function AdminDashboard({
   initial,
 }: {
@@ -100,6 +138,8 @@ export default function AdminDashboard({
   const [tab, setTab] = useState<Tab>('gallery');
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  // Empty string = idle; otherwise a status line shown during video upload.
+  const [videoStatus, setVideoStatus] = useState('');
   const [message, setMessage] = useState<{
     kind: 'ok' | 'err';
     text: string;
@@ -199,6 +239,90 @@ export default function AdminDashboard({
     }
   }
 
+  async function addVideo(file: File | undefined) {
+    if (!file) return;
+    if (content.videoTestimonials.length >= MAX_VIDEOS) {
+      setMessage({
+        kind: 'err',
+        text: `Limite de ${MAX_VIDEOS} vídeos atingido (plano Free do Mux). Exclua um para adicionar outro.`,
+      });
+      return;
+    }
+    setMessage(null);
+    setVideoStatus('Preparando envio…');
+    try {
+      // 1. Ask the server for a Mux direct-upload URL.
+      const res = await fetch('/api/admin/mux/upload', {
+        method: 'POST',
+      });
+      if (!res.ok) throw new Error('Não foi possível iniciar o upload.');
+      const { uploadId, uploadUrl } = await res.json();
+
+      // 2. Upload the file straight to Mux (chunked, resumable).
+      await new Promise<void>((resolve, reject) => {
+        const up = UpChunk.createUpload({ endpoint: uploadUrl, file });
+        up.on('progress', e => {
+          setVideoStatus(
+            `Enviando… ${Math.round(
+              (e as CustomEvent<{ progress: number }>).detail.progress
+            )}%`
+          );
+        });
+        up.on('success', () => resolve());
+        up.on('error', e =>
+          reject(
+            new Error(
+              (e as CustomEvent<{ message?: string }>).detail?.message ||
+                'Falha no upload'
+            )
+          )
+        );
+      });
+
+      // 3. Poll Mux until the asset finishes processing.
+      setVideoStatus('Processando o vídeo no Mux…');
+      const result = await pollMuxStatus(uploadId);
+      if (result.status !== 'ready' || !result.playbackId) {
+        throw new Error('O Mux não conseguiu processar este vídeo.');
+      }
+
+      patch({
+        videoTestimonials: [
+          ...content.videoTestimonials,
+          {
+            id: newId(),
+            title: '',
+            muxPlaybackId: result.playbackId,
+            muxAssetId: result.assetId,
+          },
+        ],
+      });
+      setMessage({
+        kind: 'ok',
+        text: 'Vídeo adicionado! Clique em Salvar para publicar.',
+      });
+    } catch (e) {
+      setMessage({ kind: 'err', text: (e as Error).message });
+    } finally {
+      setVideoStatus('');
+    }
+  }
+
+  function removeVideo(video: VideoTestimonial) {
+    patch({
+      videoTestimonials: content.videoTestimonials.filter(
+        v => v.id !== video.id
+      ),
+    });
+    if (video.muxAssetId) {
+      fetch('/api/admin/mux/delete', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ assetId: video.muxAssetId }),
+      }).catch(() => {});
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-10 border-b border-muted bg-background/95 backdrop-blur">
@@ -265,6 +389,22 @@ export default function AdminDashboard({
               patch({
                 gallery: content.gallery.map(p =>
                   p.id === id ? { ...p, alt } : p
+                ),
+              })
+            }
+          />
+        )}
+
+        {tab === 'videos' && (
+          <VideosEditor
+            videos={content.videoTestimonials}
+            videoStatus={videoStatus}
+            onAdd={addVideo}
+            onRemove={removeVideo}
+            onTitle={(id, title) =>
+              patch({
+                videoTestimonials: content.videoTestimonials.map(v =>
+                  v.id === id ? { ...v, title } : v
                 ),
               })
             }
@@ -455,6 +595,183 @@ function SortablePhoto({
             Excluir
           </button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ----------------------------- Videos ----------------------------- */
+
+function formatDuration(ms: number): string {
+  const totalSec = Math.round(ms / 1000);
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return m > 0 ? `${m}m ${s}s` : `${s}s`;
+}
+
+/** Per-video Mux Data metrics (last 30 days), fetched on mount. */
+function MuxMetrics({ videoId }: { videoId: string }) {
+  const [data, setData] = useState<{
+    views: number;
+    avgWatchTimeMs: number;
+    totalWatchTimeMs: number;
+  } | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    fetch(`/api/admin/mux/metrics?videoId=${encodeURIComponent(videoId)}`)
+      .then(r => (r.ok ? r.json() : Promise.reject()))
+      .then(d => active && setData(d))
+      .catch(() => active && setFailed(true));
+    return () => {
+      active = false;
+    };
+  }, [videoId]);
+
+  if (failed) {
+    return (
+      <p className="text-xs text-muted-foreground">
+        Métricas indisponíveis.
+      </p>
+    );
+  }
+  if (!data) {
+    return (
+      <p className="text-xs text-muted-foreground">
+        Carregando métricas…
+      </p>
+    );
+  }
+  const cell = (value: string, label: string) => (
+    <div>
+      <div className="font-semibold text-foreground">{value}</div>
+      <div className="text-muted-foreground">{label}</div>
+    </div>
+  );
+  return (
+    <div className="grid grid-cols-3 gap-1 text-center text-xs">
+      {cell(String(data.views), 'views')}
+      {cell(formatDuration(data.avgWatchTimeMs), 'média')}
+      {cell(formatDuration(data.totalWatchTimeMs), 'total')}
+    </div>
+  );
+}
+
+function VideosEditor({
+  videos,
+  videoStatus,
+  onAdd,
+  onRemove,
+  onTitle,
+}: {
+  videos: VideoTestimonial[];
+  videoStatus: string;
+  onAdd: (file: File | undefined) => void;
+  onRemove: (video: VideoTestimonial) => void;
+  onTitle: (id: string, title: string) => void;
+}) {
+  const busy = !!videoStatus;
+  const atLimit = videos.length >= MAX_VIDEOS;
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center gap-3">
+        <label
+          className={`inline-flex items-center gap-2 rounded-lg border border-dashed border-primary px-4 py-3 font-lato text-primary transition ${
+            busy || atLimit
+              ? 'cursor-not-allowed opacity-50'
+              : 'cursor-pointer hover:bg-primary/10'
+          }`}
+        >
+          <input
+            type="file"
+            accept="video/*"
+            className="hidden"
+            disabled={busy || atLimit}
+            onChange={e => onAdd(e.target.files?.[0])}
+          />
+          {busy ? 'Aguarde…' : '+ Adicionar vídeo'}
+        </label>
+        <span className="text-sm font-lato text-muted-foreground">
+          {videos.length}/{MAX_VIDEOS} vídeos
+        </span>
+        {busy && (
+          <p className="text-sm font-lato text-muted-foreground">
+            {videoStatus}
+          </p>
+        )}
+        {atLimit && !busy && (
+          <p className="text-sm font-lato text-primary">
+            Limite atingido — exclua um vídeo para adicionar outro.
+          </p>
+        )}
+      </div>
+
+      <div className="rounded-lg border border-primary/30 bg-primary/10 p-3 text-sm font-lato text-foreground">
+        💡 <strong>Dica:</strong> os vídeos são otimizados automaticamente
+        (qualquer tamanho, inclusive do celular). Depois de enviar, aguarde
+        o processamento terminar e clique em <strong>Salvar</strong> para
+        publicar.
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {videos.map(v => (
+          <div
+            key={v.id}
+            className="overflow-hidden rounded-xl bg-card shadow"
+          >
+            {v.muxPlaybackId ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={`https://image.mux.com/${v.muxPlaybackId}/thumbnail.webp?width=480`}
+                alt=""
+                className="aspect-video w-full bg-muted/30 object-cover"
+              />
+            ) : v.src ? (
+              <video
+                src={v.src}
+                muted
+                className="aspect-video w-full object-cover"
+              />
+            ) : null}
+            <div className="space-y-2 p-2">
+              <label className="block">
+                <span className="text-xs font-lato text-muted-foreground">
+                  Título (opcional)
+                </span>
+                <input
+                  value={v.title ?? ''}
+                  placeholder="Ex.: depoimento da Maria"
+                  onChange={e => onTitle(v.id, e.target.value)}
+                  className={inputClass + ' mt-1 text-xs'}
+                />
+              </label>
+              {v.muxPlaybackId ? (
+                <div className="rounded-md bg-background/60 p-2">
+                  <div className="mb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
+                    Métricas · últimos 30 dias
+                  </div>
+                  <MuxMetrics videoId={v.muxPlaybackId} />
+                </div>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  Métricas só para vídeos no Mux.
+                </p>
+              )}
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">
+                  {v.muxPlaybackId ? 'Mux' : 'Arquivo local'}
+                </span>
+                <button
+                  onClick={() => onRemove(v)}
+                  className="text-xs font-semibold text-primary hover:underline"
+                >
+                  Excluir
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

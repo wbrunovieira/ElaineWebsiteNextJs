@@ -87,5 +87,10 @@
       "date": "Coming soon",
       "horario": "7:00 PM"
     }
+  ],
+  "videoTestimonials": [
+    { "id": "vt1", "src": "/videos/depoiment1_lowbitrate.mp4" },
+    { "id": "vt2", "src": "/videos/depoiment3_lowbitrate.mp4" },
+    { "id": "vt3", "src": "/videos/depoiment4_lowbitrate.mp4" }
   ]
 }

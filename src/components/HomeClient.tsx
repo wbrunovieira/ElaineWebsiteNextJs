@@ -103,6 +103,7 @@ export default function HomeClient({
       />
       <TestimonialsSection
         stories={content.stories}
+        videoTestimonials={content.videoTestimonials}
         onActionClick={scrollToCTASection}
       />
       <CTAButton

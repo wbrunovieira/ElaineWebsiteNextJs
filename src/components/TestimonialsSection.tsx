@@ -5,7 +5,7 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
 import dynamic from 'next/dynamic';
-import type { Story } from '@/lib/content';
+import type { Story, VideoTestimonial } from '@/lib/content';
 
 const DynamicReactPlayer = dynamic(
   () => import('react-player'),
@@ -14,30 +14,33 @@ const DynamicReactPlayer = dynamic(
   }
 );
 
+const MuxPlayer = dynamic(
+  () => import('@mux/mux-player-react'),
+  { ssr: false }
+);
+
 interface TestimonialsSectionProps {
   stories: Story[];
+  videoTestimonials: VideoTestimonial[];
   onActionClick?: () => void;
 }
 
 export default function TestimonialsSection({
   stories,
+  videoTestimonials,
 }: TestimonialsSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  const [modalVideoSrc, setModalVideoSrc] = useState<
-    string | null
-  >(null);
+  const [modalVideo, setModalVideo] =
+    useState<VideoTestimonial | null>(null);
   const [expandedIndex, setExpandedIndex] = useState<
     number | null
   >(null);
-  const [videoLoadingStates, setVideoLoadingStates] =
-    useState<boolean[]>(Array(6).fill(true));
 
-  const videoSources = [
-    '/videos/depoiment1_lowbitrate.mp4',
-    '/videos/depoiment3_lowbitrate.mp4',
-    '/videos/depoiment4_lowbitrate.mp4',
-  ];
+  // Only show videos that are actually playable (local file or ready Mux asset).
+  const videos = videoTestimonials.filter(
+    v => v.muxPlaybackId || v.src
+  );
 
   useGSAP(() => {
     gsap.fromTo(
@@ -57,14 +60,6 @@ export default function TestimonialsSection({
       }
     );
   });
-
-  const handleVideoReady = (index: number) => {
-    setVideoLoadingStates(prevStates => {
-      const newStates = [...prevStates];
-      newStates[index] = false;
-      return newStates;
-    });
-  };
 
   return (
     <section
@@ -136,51 +131,81 @@ export default function TestimonialsSection({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {videoSources.map((videoSrc, index) => (
+        {videos.map(video => (
           <div
-            key={index}
+            key={video.id}
             className="bg-gradient-to-r from-primary/40 via-background to-background relative aspect-w-16 aspect-h-9 rounded overflow-hidden shadow-lg cursor-pointer"
-            onClick={() => setModalVideoSrc(videoSrc)}
+            onClick={() => setModalVideo(video)}
           >
-            {videoLoadingStates[index] && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
-                <div className="w-10 h-10 border-4 border-t-primary border-white rounded-full animate-spin"></div>
-              </div>
-            )}
             <div className="rounded shadow-xl hover:scale-110 transition-transform duration-300 hover:shadow-2xl hover:border-primary">
-              <DynamicReactPlayer
-                url={videoSrc}
-                playing
-                loop
-                muted
-                width="100%"
-                height="100%"
-                onReady={() => handleVideoReady(index)}
-              />
+              {video.muxPlaybackId ? (
+                <MuxPlayer
+                  playbackId={video.muxPlaybackId}
+                  streamType="on-demand"
+                  envKey={process.env.NEXT_PUBLIC_MUX_ENV_KEY}
+                  metadata={{
+                    video_id: video.muxPlaybackId,
+                    video_title: video.title || video.muxPlaybackId,
+                  }}
+                  autoPlay="muted"
+                  loop
+                  muted
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    pointerEvents: 'none',
+                    '--controls': 'none',
+                  }}
+                />
+              ) : (
+                <DynamicReactPlayer
+                  url={video.src}
+                  playing
+                  loop
+                  muted
+                  width="100%"
+                  height="100%"
+                />
+              )}
               <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/20 to-muted/10 blur-xl"></div>
             </div>
           </div>
         ))}
       </div>
 
-      {modalVideoSrc && (
+      {modalVideo && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
           <div className="relative w-full max-w-md mx-auto p-4">
             <div
               className="relative w-full rounded overflow-hidden"
               style={{ aspectRatio: '16 / 9' }}
             >
-              <DynamicReactPlayer
-                url={modalVideoSrc}
-                controls
-                playing
-                width="100%"
-                height="100%"
-              />
+              {modalVideo.muxPlaybackId ? (
+                <MuxPlayer
+                  playbackId={modalVideo.muxPlaybackId}
+                  streamType="on-demand"
+                  envKey={process.env.NEXT_PUBLIC_MUX_ENV_KEY}
+                  metadata={{
+                    video_id: modalVideo.muxPlaybackId,
+                    video_title:
+                      modalVideo.title || modalVideo.muxPlaybackId,
+                  }}
+                  autoPlay
+                  style={{ width: '100%', height: '100%' }}
+                />
+              ) : (
+                <DynamicReactPlayer
+                  url={modalVideo.src}
+                  controls
+                  playing
+                  width="100%"
+                  height="100%"
+                />
+              )}
             </div>
             <button
               className="absolute top-1 right-2 text-white bg-red-600 p-2 rounded-full"
-              onClick={() => setModalVideoSrc(null)}
+              onClick={() => setModalVideo(null)}
             >
               ✕
             </button>

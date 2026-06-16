@@ -41,6 +41,10 @@ function valid(): SiteContent {
         horario: '1 PM',
       },
     ],
+    videoTestimonials: [
+      { id: 'vt1', src: '/videos/depoiment1.mp4' },
+      { id: 'vt2', muxPlaybackId: 'abc123', muxAssetId: 'asset1' },
+    ],
   };
 }
 
@@ -56,6 +60,7 @@ describe('validateContent', () => {
       stories: [],
       locations: [],
       sessions: [],
+      videoTestimonials: [],
     });
     expect(r.ok).toBe(true);
   });

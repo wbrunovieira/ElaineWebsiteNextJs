@@ -22,6 +22,7 @@ const sample: SiteContent = {
   stories: [{ id: 's1', name: 'Enda', city: 'FL', content: 'hi' }],
   locations: [],
   sessions: [],
+  videoTestimonials: [],
 };
 
 function putReq(body: unknown, raw = false) {

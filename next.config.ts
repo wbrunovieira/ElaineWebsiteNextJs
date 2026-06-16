@@ -24,10 +24,10 @@ const securityHeaders = [
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.youtube.com https://s.ytimg.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
-      "img-src 'self' data: blob: https://i.ytimg.com https://img.youtube.com https://*.public.blob.vercel-storage.com",
-      "media-src 'self' blob:",
+      "img-src 'self' data: blob: https://i.ytimg.com https://img.youtube.com https://*.public.blob.vercel-storage.com https://image.mux.com",
+      "media-src 'self' blob: https://*.mux.com",
       "frame-src https://www.youtube.com https://www.youtube-nocookie.com https://eventbrite.com https://www.eventbrite.com https://www.google.com",
-      "connect-src 'self'",
+      "connect-src 'self' https://*.mux.com https://*.litix.io",
       // browser-image-compression spins up a web worker from a blob: URL
       "worker-src 'self' blob:",
     ].join('; '),
