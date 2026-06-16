@@ -89,8 +89,8 @@
     }
   ],
   "videoTestimonials": [
-    { "id": "vt1", "src": "/videos/depoiment1_lowbitrate.mp4" },
-    { "id": "vt2", "src": "/videos/depoiment3_lowbitrate.mp4" },
-    { "id": "vt3", "src": "/videos/depoiment4_lowbitrate.mp4" }
+    { "id": "vt1", "muxPlaybackId": "r01MNxL002rzSFkbI02irjvQ2xVWLLHVcz3S00cqfkX1tP4", "muxAssetId": "i7Ph3XxzwGqAgYE4Kfi00TWkTnvjXzEysKLKBcLr5zRA" },
+    { "id": "vt2", "muxPlaybackId": "5uRQ22oiOQlsfXBEIH1FBBy9Av6gqxISzegI00iFouws", "muxAssetId": "Yr01S018dyBXENr5AQsGnt0249eVImK8IOL9ouu6AxRW9U" },
+    { "id": "vt3", "muxPlaybackId": "KVGStYdsSjH600T4cJl7HHFx01sYKqmyBFlW5dmTV02mmE", "muxAssetId": "Q00N7RhmD3J5LN4Gy4oPFNP9rxKgjZFEZrC02ixPxtimU" }
   ]
 }
