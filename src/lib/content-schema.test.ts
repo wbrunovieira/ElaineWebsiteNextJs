@@ -71,6 +71,12 @@ describe('validateContent', () => {
     expect(validateContent(c).ok).toBe(true);
   });
 
+  it('rejects a photo with an empty alt', () => {
+    const c = valid();
+    c.gallery[0].alt = '   ';
+    expect(validateContent(c).ok).toBe(false);
+  });
+
   it('rejects a missing id', () => {
     const c = valid() as unknown as { stories: { id?: string }[] };
     delete c.stories[0].id;

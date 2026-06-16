@@ -40,20 +40,20 @@ export default function AdminLoginPage() {
     <main className="min-h-screen flex items-center justify-center bg-background px-6">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm bg-card rounded-2xl shadow-xl p-8 space-y-6"
+        className="w-full max-w-md space-y-7 rounded-3xl border border-black/[0.06] bg-white/70 p-8 shadow-[0_12px_48px_rgba(43,45,66,0.12)] backdrop-blur-sm sm:p-10"
       >
-        <div className="text-center space-y-1">
-          <h1 className="text-2xl font-playfair font-bold text-primary">
+        <div className="space-y-2 text-center">
+          <h1 className="font-playfair text-3xl font-bold text-primary sm:text-4xl">
             Área da Elaine
           </h1>
-          <p className="text-sm text-muted-foreground font-lato">
+          <p className="font-lato text-base text-foreground/60">
             Entre para atualizar o site
           </p>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           <label className="block">
-            <span className="text-sm font-lato text-foreground">
+            <span className="mb-1.5 block font-lato text-base font-semibold text-foreground/80">
               E-mail
             </span>
             <input
@@ -62,21 +62,21 @@ export default function AdminLoginPage() {
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
-              className="mt-1 w-full rounded-lg border border-muted bg-background px-3 py-2 text-foreground focus:border-primary focus:outline-none"
+              className="w-full rounded-xl border border-border bg-white/70 px-4 py-3 text-base text-foreground transition focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/15"
             />
           </label>
           <label className="block">
-            <span className="text-sm font-lato text-foreground">
+            <span className="mb-1.5 block font-lato text-base font-semibold text-foreground/80">
               Senha
             </span>
-            <div className="relative mt-1">
+            <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                className="w-full rounded-lg border border-muted bg-background px-3 py-2 pr-10 text-foreground focus:border-primary focus:outline-none"
+                className="w-full rounded-xl border border-border bg-white/70 px-4 py-3 pr-12 text-base text-foreground transition focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/15"
               />
               <button
                 type="button"
@@ -85,7 +85,7 @@ export default function AdminLoginPage() {
                   showPassword ? 'Ocultar senha' : 'Mostrar senha'
                 }
                 aria-pressed={showPassword}
-                className="absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground hover:text-primary"
+                className="absolute inset-y-0 right-0 flex items-center px-4 text-muted hover:text-primary"
               >
                 {showPassword ? (
                   <EyeOff className="h-5 w-5" />
@@ -98,7 +98,10 @@ export default function AdminLoginPage() {
         </div>
 
         {error && (
-          <p className="text-sm text-primary font-lato" role="alert">
+          <p
+            className="rounded-xl bg-primary/10 px-4 py-3 font-lato text-base font-medium text-primary"
+            role="alert"
+          >
             {error}
           </p>
         )}
@@ -106,7 +109,7 @@ export default function AdminLoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-primary py-2 font-lato font-semibold text-background transition hover:opacity-90 disabled:opacity-60"
+          className="w-full rounded-xl bg-primary py-3.5 font-lato text-lg font-semibold text-background shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-60 disabled:hover:translate-y-0"
         >
           {loading ? 'Entrando…' : 'Entrar'}
         </button>

@@ -6,7 +6,8 @@ const galleryPhoto = z.object({
   src: z.string().min(1),
   width: z.number().int().positive(),
   height: z.number().int().positive(),
-  alt: z.string(),
+  // alt is required for accessibility + SEO.
+  alt: z.string().trim().min(1),
   blurDataURL: z.string().optional(),
 });
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { AnimatePresence, motion } from 'framer-motion';
 import imageCompression from 'browser-image-compression';
 import {
   DndContext,
@@ -37,12 +38,12 @@ type Tab =
   | 'locations'
   | 'videos';
 
-const TABS: { key: Tab; label: string }[] = [
-  { key: 'gallery', label: 'Galeria' },
-  { key: 'videos', label: 'Vídeos' },
-  { key: 'stories', label: 'Depoimentos' },
-  { key: 'sessions', label: 'Sessões' },
-  { key: 'locations', label: 'Locais' },
+const TABS: { key: Tab; label: string; icon: string }[] = [
+  { key: 'gallery', label: 'Galeria', icon: '🖼️' },
+  { key: 'videos', label: 'Vídeos', icon: '🎬' },
+  { key: 'stories', label: 'Depoimentos', icon: '💬' },
+  { key: 'sessions', label: 'Sessões', icon: '🗓️' },
+  { key: 'locations', label: 'Locais', icon: '📍' },
 ];
 
 // Mux Free plan stores up to 10 videos at a time.
@@ -52,8 +53,13 @@ const newId = () =>
   `id-${Math.random().toString(36).slice(2, 9)}-${Date.now().toString(36)}`;
 
 const inputClass =
-  'w-full rounded-lg border border-muted bg-background px-3 py-2 text-foreground focus:border-primary focus:outline-none';
-const labelClass = 'text-sm font-lato text-muted-foreground';
+  'w-full rounded-xl border border-border bg-white/70 px-4 py-3 text-base text-foreground transition placeholder:text-muted/70 focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/15';
+const labelClass =
+  'mb-1 block text-sm font-lato font-semibold text-foreground/70';
+const cardClass =
+  'rounded-2xl border border-black/[0.06] bg-white/70 p-5 shadow-[0_4px_24px_rgba(43,45,66,0.06)] backdrop-blur-sm';
+const addBtnClass =
+  'inline-flex items-center gap-2 rounded-xl border-2 border-dashed border-primary/60 px-5 py-3 font-lato text-base font-semibold text-primary transition hover:border-primary hover:bg-primary/5';
 
 /** Reads natural dimensions of an image File. */
 function readDimensions(
@@ -178,7 +184,25 @@ export default function AdminDashboard({
     setContent(prev => ({ ...prev, ...update }));
   }
 
+  // Auto-dismiss the toast (errors linger a bit longer than successes).
+  useEffect(() => {
+    if (!message) return;
+    const ms = message.kind === 'err' ? 8000 : 4000;
+    const t = setTimeout(() => setMessage(null), ms);
+    return () => clearTimeout(t);
+  }, [message]);
+
   async function save() {
+    // Every gallery photo must have an alt (accessibility + SEO).
+    const missingAlt = content.gallery.some(p => !p.alt.trim());
+    if (missingAlt) {
+      setTab('gallery');
+      setMessage({
+        kind: 'err',
+        text: 'Toda foto precisa de uma descrição (alt). Preencha os campos destacados em vermelho.',
+      });
+      return;
+    }
     setSaving(true);
     setMessage(null);
     try {
@@ -247,7 +271,7 @@ export default function AdminDashboard({
       patch({ gallery: [...content.gallery, ...added] });
       setMessage({
         kind: 'ok',
-        text: `${added.length} foto(s) adicionada(s). Clique em Salvar para publicar.`,
+        text: `${added.length} foto(s) adicionada(s). Preencha a descrição (alt) de cada uma e clique em Salvar.`,
       });
     } catch (e) {
       setMessage({ kind: 'err', text: (e as Error).message });
@@ -356,22 +380,27 @@ export default function AdminDashboard({
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-10 border-b border-muted bg-background/95 backdrop-blur">
-        <div className="container mx-auto flex items-center justify-between px-6 py-4">
-          <h1 className="font-playfair text-xl font-bold text-primary">
-            Painel da Elaine
-          </h1>
-          <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-30 border-b border-black/[0.06] bg-background/80 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
+          <div>
+            <h1 className="font-playfair text-2xl font-bold text-primary sm:text-3xl">
+              Painel da Elaine
+            </h1>
+            <p className="font-lato text-sm text-foreground/60">
+              Atualize o conteúdo do site
+            </p>
+          </div>
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={save}
               disabled={saving}
-              className="rounded-lg bg-primary px-4 py-2 font-lato font-semibold text-background transition hover:opacity-90 disabled:opacity-60"
+              className="rounded-xl bg-primary px-5 py-2.5 font-lato text-base font-semibold text-background shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-60 disabled:hover:translate-y-0"
             >
               {saving ? 'Salvando…' : 'Salvar'}
             </button>
             <button
               onClick={logout}
-              className="rounded-lg border border-muted px-4 py-2 font-lato text-foreground transition hover:bg-card"
+              className="rounded-xl border border-border px-5 py-2.5 font-lato text-base text-foreground transition hover:bg-foreground/5"
             >
               Sair
             </button>
@@ -379,31 +408,50 @@ export default function AdminDashboard({
         </div>
       </header>
 
-      <div className="container mx-auto px-6 py-6">
+      <AnimatePresence>
         {message && (
-          <div
-            className={`mb-4 rounded-lg px-4 py-3 font-lato text-sm ${
+          <motion.div
+            key={message.text}
+            initial={{ opacity: 0, y: -24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -24 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            role="alert"
+            aria-live="assertive"
+            className={`fixed left-1/2 top-5 z-50 flex w-[min(92vw,30rem)] -translate-x-1/2 items-start gap-3 rounded-2xl px-5 py-4 font-lato text-base shadow-2xl ${
               message.kind === 'ok'
-                ? 'bg-secondary/15 text-secondary'
-                : 'bg-primary/15 text-primary'
+                ? 'bg-secondary text-background'
+                : 'bg-primary text-background'
             }`}
-            role="status"
           >
-            {message.text}
-          </div>
+            <span className="mt-0.5 text-xl leading-none">
+              {message.kind === 'ok' ? '✓' : '⚠'}
+            </span>
+            <p className="flex-1 font-medium">{message.text}</p>
+            <button
+              onClick={() => setMessage(null)}
+              aria-label="Fechar"
+              className="ml-1 shrink-0 text-background/80 hover:text-background"
+            >
+              ✕
+            </button>
+          </motion.div>
         )}
+      </AnimatePresence>
 
-        <nav className="mb-6 flex flex-wrap gap-2">
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+        <nav className="-mx-4 mb-8 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
           {TABS.map(t => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`rounded-full px-4 py-2 font-lato text-sm transition ${
+              className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 font-lato text-base font-medium transition ${
                 tab === t.key
-                  ? 'bg-primary text-background'
-                  : 'bg-card text-foreground hover:bg-muted/40'
+                  ? 'bg-primary text-background shadow-lg shadow-primary/25'
+                  : 'border border-border bg-white/50 text-foreground/70 hover:bg-white hover:text-foreground'
               }`}
             >
+              <span aria-hidden>{t.icon}</span>
               {t.label}
             </button>
           ))}
@@ -501,9 +549,9 @@ function GalleryEditor({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-3">
-        <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-primary px-4 py-3 font-lato text-primary transition hover:bg-primary/10">
+        <label className={addBtnClass + ' cursor-pointer'}>
           <input
             type="file"
             accept="image/*,.heic,.heif"
@@ -512,19 +560,21 @@ function GalleryEditor({
             disabled={uploading}
             onChange={e => onAdd(e.target.files)}
           />
-          {uploading ? 'Enviando…' : '+ Adicionar fotos'}
+          {uploading ? 'Enviando…' : '＋ Adicionar fotos'}
         </label>
       </div>
 
-      <div className="rounded-lg border border-primary/30 bg-primary/10 p-3 text-sm font-lato text-foreground">
+      <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 font-lato text-base text-foreground">
         💡 <strong>Dica:</strong> arraste as fotos (pelo ícone{' '}
-        <span className="rounded bg-background/70 px-1">⠿</span>) para
-        reorganizá-las. A ordem que você definir aqui é exatamente a ordem
-        em que elas aparecem no site. Lembre de clicar em{' '}
-        <strong>Salvar</strong> para publicar.
+        <span className="rounded bg-background px-1">⠿</span>) para
+        reorganizá-las. A ordem que você definir é seguida no site — as
+        primeiras aparecem no topo e as últimas embaixo. O layout pode
+        reposicionar levemente para encaixar melhor fotos de tamanhos
+        diferentes, então pode não ficar <em>exatamente</em> igual. Lembre
+        de clicar em <strong>Salvar</strong> para publicar.
       </div>
 
-      <div className="rounded-lg bg-card p-3 text-sm font-lato text-muted-foreground">
+      <div className={cardClass + ' text-base text-foreground/70'}>
         <strong className="text-foreground">O que é a descrição (alt)?</strong>{' '}
         É um texto curto que descreve o que aparece na foto. Ele é lido em
         voz alta para pessoas com deficiência visual (acessibilidade), ajuda
@@ -541,7 +591,7 @@ function GalleryEditor({
           items={photos.map(p => p.id)}
           strategy={rectSortingStrategy}
         >
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
             {photos.map(photo => (
               <SortablePhoto
                 key={photo.id}
@@ -586,7 +636,7 @@ function SortablePhoto({
     <div
       ref={setNodeRef}
       style={style}
-      className="overflow-hidden rounded-xl bg-card shadow"
+      className="overflow-hidden rounded-2xl border border-black/[0.06] bg-white/70 shadow-[0_4px_24px_rgba(43,45,66,0.06)] transition hover:shadow-[0_8px_30px_rgba(43,45,66,0.12)]"
     >
       <div className="relative">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -601,27 +651,34 @@ function SortablePhoto({
           {...attributes}
           {...listeners}
           aria-label="Arrastar para reordenar"
-          className="absolute left-2 top-2 cursor-grab touch-none rounded-md bg-background/80 px-2 py-1 text-sm shadow active:cursor-grabbing"
+          className="absolute left-2 top-2 cursor-grab touch-none rounded-lg bg-background/90 px-2.5 py-1.5 text-base shadow-md active:cursor-grabbing"
         >
           ⠿
         </button>
       </div>
-      <div className="space-y-2 p-2">
+      <div className="space-y-3 p-3">
         <label className="block">
-          <span className="text-xs font-lato text-muted-foreground">
-            Descrição (alt)
+          <span className={labelClass}>
+            Descrição (alt) <span className="text-primary">*</span>
           </span>
           <input
             value={photo.alt}
             placeholder="Ex.: mulher recebendo ativação Kundalini"
             onChange={e => onAlt(photo.id, e.target.value)}
-            className={inputClass + ' mt-1 text-xs'}
+            aria-invalid={!photo.alt.trim()}
+            className={
+              inputClass +
+              ' text-sm' +
+              (!photo.alt.trim()
+                ? ' border-primary ring-2 ring-primary/30'
+                : '')
+            }
           />
         </label>
         <div className="flex items-center justify-end">
           <button
             onClick={() => onRemove(photo)}
-            className="rounded px-2 py-1 text-xs font-semibold text-primary hover:underline"
+            className="rounded-lg px-3 py-1.5 text-sm font-semibold text-primary transition hover:bg-primary/10"
           >
             Excluir
           </button>
@@ -662,26 +719,22 @@ function MuxMetrics({ videoId }: { videoId: string }) {
 
   if (failed) {
     return (
-      <p className="text-xs text-muted-foreground">
-        Métricas indisponíveis.
-      </p>
+      <p className="text-sm text-foreground/50">Métricas indisponíveis.</p>
     );
   }
   if (!data) {
     return (
-      <p className="text-xs text-muted-foreground">
-        Carregando métricas…
-      </p>
+      <p className="text-sm text-foreground/50">Carregando métricas…</p>
     );
   }
   const cell = (value: string, label: string) => (
     <div>
-      <div className="font-semibold text-foreground">{value}</div>
-      <div className="text-muted-foreground">{label}</div>
+      <div className="text-lg font-bold text-foreground">{value}</div>
+      <div className="text-xs text-foreground/60">{label}</div>
     </div>
   );
   return (
-    <div className="grid grid-cols-3 gap-1 text-center text-xs">
+    <div className="grid grid-cols-3 gap-1 text-center">
       {cell(String(data.views), 'views')}
       {cell(formatDuration(data.avgWatchTimeMs), 'média')}
       {cell(formatDuration(data.totalWatchTimeMs), 'total')}
@@ -705,14 +758,15 @@ function VideosEditor({
   const busy = !!videoStatus;
   const atLimit = videos.length >= MAX_VIDEOS;
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-3">
         <label
-          className={`inline-flex items-center gap-2 rounded-lg border border-dashed border-primary px-4 py-3 font-lato text-primary transition ${
-            busy || atLimit
-              ? 'cursor-not-allowed opacity-50'
-              : 'cursor-pointer hover:bg-primary/10'
-          }`}
+          className={
+            addBtnClass +
+            (busy || atLimit
+              ? ' cursor-not-allowed opacity-50'
+              : ' cursor-pointer')
+          }
         >
           <input
             type="file"
@@ -721,35 +775,35 @@ function VideosEditor({
             disabled={busy || atLimit}
             onChange={e => onAdd(e.target.files?.[0])}
           />
-          {busy ? 'Aguarde…' : '+ Adicionar vídeo'}
+          {busy ? 'Aguarde…' : '＋ Adicionar vídeo'}
         </label>
-        <span className="text-sm font-lato text-muted-foreground">
+        <span className="rounded-full bg-foreground/5 px-3 py-1 text-sm font-semibold text-foreground/70">
           {videos.length}/{MAX_VIDEOS} vídeos
         </span>
         {busy && (
-          <p className="text-sm font-lato text-muted-foreground">
+          <p className="font-lato text-base text-foreground/70">
             {videoStatus}
           </p>
         )}
         {atLimit && !busy && (
-          <p className="text-sm font-lato text-primary">
+          <p className="font-lato text-base font-medium text-primary">
             Limite atingido — exclua um vídeo para adicionar outro.
           </p>
         )}
       </div>
 
-      <div className="rounded-lg border border-primary/30 bg-primary/10 p-3 text-sm font-lato text-foreground">
+      <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 font-lato text-base text-foreground">
         💡 <strong>Dica:</strong> os vídeos são otimizados automaticamente
         (qualquer tamanho, inclusive do celular). Depois de enviar, aguarde
         o processamento terminar e clique em <strong>Salvar</strong> para
         publicar.
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {videos.map(v => (
           <div
             key={v.id}
-            className="overflow-hidden rounded-xl bg-card shadow"
+            className="overflow-hidden rounded-2xl border border-black/[0.06] bg-white/70 shadow-[0_4px_24px_rgba(43,45,66,0.06)]"
           >
             {v.muxPlaybackId ? (
               /* eslint-disable-next-line @next/next/no-img-element */
@@ -765,37 +819,35 @@ function VideosEditor({
                 className="aspect-video w-full object-cover"
               />
             ) : null}
-            <div className="space-y-2 p-2">
+            <div className="space-y-3 p-3">
               <label className="block">
-                <span className="text-xs font-lato text-muted-foreground">
-                  Título (opcional)
-                </span>
+                <span className={labelClass}>Título (opcional)</span>
                 <input
                   value={v.title ?? ''}
                   placeholder="Ex.: depoimento da Maria"
                   onChange={e => onTitle(v.id, e.target.value)}
-                  className={inputClass + ' mt-1 text-xs'}
+                  className={inputClass + ' text-sm'}
                 />
               </label>
               {v.muxPlaybackId ? (
-                <div className="rounded-md bg-background/60 p-2">
-                  <div className="mb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
+                <div className="rounded-xl bg-foreground/[0.04] p-3">
+                  <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-foreground/50">
                     Métricas · últimos 30 dias
                   </div>
                   <MuxMetrics videoId={v.muxPlaybackId} />
                 </div>
               ) : (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-foreground/50">
                   Métricas só para vídeos no Mux.
                 </p>
               )}
               <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">
+                <span className="rounded-full bg-foreground/5 px-2.5 py-1 text-xs font-semibold text-foreground/60">
                   {v.muxPlaybackId ? 'Mux' : 'Arquivo local'}
                 </span>
                 <button
                   onClick={() => onRemove(v)}
-                  className="text-xs font-semibold text-primary hover:underline"
+                  className="rounded-lg px-3 py-1.5 text-sm font-semibold text-primary transition hover:bg-primary/10"
                 >
                   Excluir
                 </button>
@@ -822,10 +874,10 @@ function StoriesEditor({
       stories.map(s => (s.id === id ? { ...s, [field]: value } : s))
     );
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {stories.map(story => (
-        <div key={story.id} className="space-y-2 rounded-xl bg-card p-4 shadow">
-          <div className="grid gap-2 sm:grid-cols-2">
+        <div key={story.id} className="space-y-4 rounded-2xl border border-black/[0.06] bg-white/70 p-5 shadow-[0_4px_24px_rgba(43,45,66,0.06)]">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <span className={labelClass}>Nome</span>
               <input
@@ -854,7 +906,7 @@ function StoriesEditor({
           </div>
           <button
             onClick={() => onChange(stories.filter(s => s.id !== story.id))}
-            className="text-xs font-semibold text-primary hover:underline"
+            className="self-start rounded-lg px-3 py-1.5 text-sm font-semibold text-primary transition hover:bg-primary/10"
           >
             Excluir depoimento
           </button>
@@ -867,7 +919,7 @@ function StoriesEditor({
             { id: newId(), name: '', city: '', content: '' },
           ])
         }
-        className="rounded-lg border border-dashed border-primary px-4 py-2 font-lato text-primary hover:bg-primary/10"
+        className="inline-flex items-center gap-2 rounded-xl border-2 border-dashed border-primary/60 px-5 py-3 font-lato text-base font-semibold text-primary transition hover:border-primary hover:bg-primary/5"
       >
         + Adicionar depoimento
       </button>
@@ -893,10 +945,10 @@ function SessionsEditor({
       sessions.map(s => (s.id === id ? { ...s, [field]: value } : s))
     );
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {sessions.map(s => (
-        <div key={s.id} className="space-y-2 rounded-xl bg-card p-4 shadow">
-          <div className="grid gap-2 sm:grid-cols-2">
+        <div key={s.id} className="space-y-4 rounded-2xl border border-black/[0.06] bg-white/70 p-5 shadow-[0_4px_24px_rgba(43,45,66,0.06)]">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <span className={labelClass}>Título</span>
               <input
@@ -968,7 +1020,7 @@ function SessionsEditor({
           </div>
           <button
             onClick={() => onChange(sessions.filter(x => x.id !== s.id))}
-            className="text-xs font-semibold text-primary hover:underline"
+            className="self-start rounded-lg px-3 py-1.5 text-sm font-semibold text-primary transition hover:bg-primary/10"
           >
             Excluir sessão
           </button>
@@ -991,7 +1043,7 @@ function SessionsEditor({
             },
           ])
         }
-        className="rounded-lg border border-dashed border-primary px-4 py-2 font-lato text-primary hover:bg-primary/10"
+        className="inline-flex items-center gap-2 rounded-xl border-2 border-dashed border-primary/60 px-5 py-3 font-lato text-base font-semibold text-primary transition hover:border-primary hover:bg-primary/5"
       >
         + Adicionar sessão
       </button>
@@ -1025,9 +1077,9 @@ function LocationsEditor({
     { key: 'mapEmbedSrc', label: 'URL do mapa incorporado (embed)' },
   ];
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {locations.map(l => (
-        <div key={l.id} className="space-y-2 rounded-xl bg-card p-4 shadow">
+        <div key={l.id} className="space-y-4 rounded-2xl border border-black/[0.06] bg-white/70 p-5 shadow-[0_4px_24px_rgba(43,45,66,0.06)]">
           {fields.map(f => (
             <div key={f.key}>
               <span className={labelClass}>{f.label}</span>
@@ -1040,7 +1092,7 @@ function LocationsEditor({
           ))}
           <button
             onClick={() => onChange(locations.filter(x => x.id !== l.id))}
-            className="text-xs font-semibold text-primary hover:underline"
+            className="self-start rounded-lg px-3 py-1.5 text-sm font-semibold text-primary transition hover:bg-primary/10"
           >
             Excluir local
           </button>
@@ -1061,7 +1113,7 @@ function LocationsEditor({
             },
           ])
         }
-        className="rounded-lg border border-dashed border-primary px-4 py-2 font-lato text-primary hover:bg-primary/10"
+        className="inline-flex items-center gap-2 rounded-xl border-2 border-dashed border-primary/60 px-5 py-3 font-lato text-base font-semibold text-primary transition hover:border-primary hover:bg-primary/5"
       >
         + Adicionar local
       </button>
