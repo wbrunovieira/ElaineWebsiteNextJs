@@ -74,6 +74,35 @@ function readDimensions(
   });
 }
 
+/** True for HEIC/HEIF files (often from iPhones); type may be empty. */
+function isHeic(file: File): boolean {
+  const t = file.type.toLowerCase();
+  return (
+    t === 'image/heic' ||
+    t === 'image/heif' ||
+    /\.hei[cf]$/i.test(file.name)
+  );
+}
+
+/**
+ * Converts HEIC/HEIF to JPEG in the browser (most browsers can't decode HEIC
+ * into a canvas). Other formats pass through untouched. heic2any is loaded
+ * lazily so it only ships when an iPhone HEIC is actually selected.
+ */
+async function toBrowserReadable(file: File): Promise<File> {
+  if (!isHeic(file)) return file;
+  const heic2any = (await import('heic2any')).default;
+  const converted = await heic2any({
+    blob: file,
+    toType: 'image/jpeg',
+    quality: 0.92,
+  });
+  const blob = Array.isArray(converted) ? converted[0] : converted;
+  const name =
+    file.name.replace(/\.(heic|heif)$/i, '') + '.jpg';
+  return new File([blob], name, { type: 'image/jpeg' });
+}
+
 /** Builds a tiny base64 blur placeholder from an image File. */
 async function makeBlur(file: File): Promise<string> {
   const url = URL.createObjectURL(file);
@@ -183,7 +212,9 @@ export default function AdminDashboard({
     try {
       const added: GalleryPhoto[] = [];
       for (const original of Array.from(files)) {
-        const compressed = await imageCompression(original, {
+        // iPhone HEIC → JPEG first (most browsers can't decode HEIC otherwise).
+        const readable = await toBrowserReadable(original);
+        const compressed = await imageCompression(readable, {
           maxWidthOrHeight: 2400,
           maxSizeMB: 1.5,
           useWebWorker: true,
@@ -475,7 +506,7 @@ function GalleryEditor({
         <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-primary px-4 py-3 font-lato text-primary transition hover:bg-primary/10">
           <input
             type="file"
-            accept="image/*"
+            accept="image/*,.heic,.heif"
             multiple
             className="hidden"
             disabled={uploading}
