@@ -165,21 +165,18 @@ export default function Gallery() {
         }
         render={{ image: renderNextImage }}
         defaultContainerWidth={1200}
+        // react-photo-album computes each photo's `sizes` from the ALBUM
+        // CONTAINER width by subtracting spacing and dividing by columns
+        // (≈ (size - 60px) / 4). Pass the container width here — NOT the
+        // per-photo width — otherwise it gets divided twice and the browser
+        // downloads a tiny (~48px) image that looks blurry. Smaller-breakpoint
+        // values are inflated to offset the lib's fixed 4-column assumption.
         sizes={{
-          size: 'calc((1168px - 60px) / 4)',
+          size: '1200px',
           sizes: [
-            {
-              viewport: '(max-width: 400px)',
-              size: 'calc((100vw - 32px - 10px) / 2)',
-            },
-            {
-              viewport: '(max-width: 800px)',
-              size: 'calc((100vw - 32px - 20px) / 3)',
-            },
-            {
-              viewport: '(max-width: 1200px)',
-              size: 'calc((100vw - 32px - 60px) / 4)',
-            },
+            { viewport: '(max-width: 400px)', size: '200vw' },
+            { viewport: '(max-width: 800px)', size: '133vw' },
+            { viewport: '(max-width: 1200px)', size: '100vw' },
           ],
         }}
       />
